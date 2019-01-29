@@ -11,26 +11,30 @@ import android.view.ViewGroup;
 
 import khaledhaouas.com.tmdbmovies.R;
 
-public class MovieListFragment extends Fragment {
+public class MovieDetailsFragment extends Fragment {
+    private static final String TAG = "MovieDetailsFragment";
 
-    private MovieListViewModel mViewModel;
+    private MovieDetailsViewModel mViewModel;
 
-    public static MovieListFragment newInstance() {
-        return new MovieListFragment();
+    public static MovieDetailsFragment newInstance() {
+        return new MovieDetailsFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.movie_list_fragment, container, false);
+        return inflater.inflate(R.layout.movie_details_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
         // TODO: Use the ViewModel
+
+        mViewModel.getPopular();
+
     }
 
 }

@@ -1,11 +1,12 @@
 package khaledhaouas.com.tmdbmovies;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import khaledhaouas.com.tmdbmovies.ui.movielist.MovieListFragment;
+import khaledhaouas.com.tmdbmovies.ui.movielist.MovieDetailsFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -13,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MovieListFragment.newInstance())
+                    .replace(R.id.container, MovieDetailsFragment.newInstance())
                     .commitNow();
         }
     }
