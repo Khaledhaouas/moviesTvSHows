@@ -24,6 +24,7 @@ import com.bumptech.glide.request.RequestOptions;
 import khaledhaouas.com.tmdbmovies.R;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
+import khaledhaouas.com.tmdbmovies.utils.Utils;
 
 public class MovieDetailsFragment extends Fragment {
     private static final String TAG = "MovieDetailsFragment";
@@ -66,7 +67,7 @@ public class MovieDetailsFragment extends Fragment {
 
         initUIElements();
 
-        mViewModel.getMovieDetails(360920, new OnMovieLoadedCallback() {
+        mViewModel.getMovieDetails(503314, new OnMovieLoadedCallback() {
             @Override
             public void onSuccess(Movie movie) {
 
@@ -77,8 +78,8 @@ public class MovieDetailsFragment extends Fragment {
                 mRtMovieRating.setRating((float) movie.getRating() / 2);
                 mTxtMovieReviewNbrs.setText(movie.getReviewNbrs()+"");
                 mTxtMoviePlot.setText(movie.getPlot());
-                mTxtMovieRunTime.setText(movie.getRunTime()+"");
-                mTxtMovieLang.setText(movie.getLanguage());
+                mTxtMovieRunTime.setText(Utils.formatTimeFromMinutes(movie.getRunTime()));
+                mTxtMovieLang.setText(Utils.getCountryFromCode(movie.getLanguage()));
                 mTxtMovieReleaseDate.setText(movie.getReleaseDate());
             }
 
@@ -118,14 +119,14 @@ public class MovieDetailsFragment extends Fragment {
         Glide.with(this)
                 .load(url)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
-                .apply(new RequestOptions().placeholder(R.drawable.movie_poster))
+                .apply(new RequestOptions().placeholder(R.drawable.movie_poster_placeholder))
                 .into(imgView);
     }
 
     private void loadImageFromURL(ImageView imgView, String url) {
         Glide.with(this)
                 .load(url)
-                .apply(new RequestOptions().placeholder(R.drawable.movie_background))
+                .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
                 .into(imgView);
     }
 
@@ -138,5 +139,7 @@ public class MovieDetailsFragment extends Fragment {
         //Color empty stars
         stars.getDrawable(0).setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), PorterDuff.Mode.SRC_IN);
     }
+
+
 
 }
