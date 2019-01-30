@@ -1,8 +1,9 @@
-package khaledhaouas.com.tmdbmovies;
+package khaledhaouas.com.tmdbmovies.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import khaledhaouas.com.tmdbmovies.R;
 import khaledhaouas.com.tmdbmovies.ui.movielist.MovieDetailsFragment;
 
 public class MainActivity extends AppCompatActivity {

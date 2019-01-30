@@ -1,32 +1,32 @@
 package khaledhaouas.com.tmdbmovies.ui.movielist;
 
 import android.arch.lifecycle.ViewModel;
-import android.util.Log;
 
-import org.json.JSONObject;
-
-import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiManager;
-import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiServerCallback;
-import khaledhaouas.com.tmdbmovies.managers.ConfigManager;
+import khaledhaouas.com.tmdbmovies.models.entities.Movie;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.repositories.MoviesRepos;
 
 public class MovieDetailsViewModel extends ViewModel {
     private static final String TAG = "MovieDetailsViewModel";
+    private MoviesRepos mMovieRepos;
 
-    public void getPopular() {
-        String url = ConfigManager.getInstance().getAppRoot() + "movie/popular" + ConfigManager.getInstance().addApiKeyToRequest();
-        Log.e(TAG, "onCreate: "+url );
-        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+    public MovieDetailsViewModel() {
+        mMovieRepos = new MoviesRepos();
+    }
+
+    public void getMovieDetails(int id, final OnMovieLoadedCallback callback) {
+        mMovieRepos.getMovieDetails(id, new OnMovieLoadedCallback() {
             @Override
-            public boolean onSuccess(JSONObject result) {
-                Log.e(TAG, "onSuccess: " + result.toString());
-                return false;
+            public void onSuccess(Movie movie) {
+                callback.onSuccess(movie);
             }
 
             @Override
-            public boolean onFailure(int statusCode) {
-                Log.e(TAG, "onFailure: " );
-                return false;
+            public void onError() {
+                callback.onError();
             }
         });
+
     }
+
 }
