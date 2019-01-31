@@ -9,11 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -21,10 +24,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
+
 import khaledhaouas.com.tmdbmovies.R;
+import khaledhaouas.com.tmdbmovies.adapters.CreditsRecyclerViewAdapter;
+import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
+
+import static android.view.View.GONE;
 
 public class MovieDetailsFragment extends Fragment {
     private static final String TAG = "MovieDetailsFragment";
@@ -42,6 +52,15 @@ public class MovieDetailsFragment extends Fragment {
     private TextView mTxtMovieRunTime;
     private TextView mTxtMovieLang;
     private TextView mTxtMoviePlot;
+
+    private TextView mTxtSynopsis;
+    private LinearLayout mLayoutSynopsis;
+    private TextView mTxtCast;
+    private LinearLayout mLayoutCast;
+    private TextView mTxtReviews;
+    private TextView mTxtSimilar;
+
+    private RecyclerView mRVCreditList;
 
     public static MovieDetailsFragment newInstance() {
         return new MovieDetailsFragment();
@@ -66,8 +85,8 @@ public class MovieDetailsFragment extends Fragment {
         // TODO: Use the ViewModel
 
         initUIElements();
-
-        mViewModel.getMovieDetails(503314, new OnMovieLoadedCallback() {
+        initUIEvents();
+        mViewModel.getMovieDetails(483906, new OnMovieLoadedCallback() {
             @Override
             public void onSuccess(Movie movie) {
 
@@ -76,7 +95,7 @@ public class MovieDetailsFragment extends Fragment {
                 mTxtMovieTitle.setText(movie.getTitle());
                 mTxtMovieGenres.setText(movie.getGenres());
                 mRtMovieRating.setRating((float) movie.getRating() / 2);
-                mTxtMovieReviewNbrs.setText(movie.getReviewNbrs()+"");
+                mTxtMovieReviewNbrs.setText(movie.getReviewNbrs() + "");
                 mTxtMoviePlot.setText(movie.getPlot());
                 mTxtMovieRunTime.setText(Utils.formatTimeFromMinutes(movie.getRunTime()));
                 mTxtMovieLang.setText(Utils.getCountryFromCode(movie.getLanguage()));
@@ -105,14 +124,43 @@ public class MovieDetailsFragment extends Fragment {
             mTxtMoviePlot = getActivity().findViewById(R.id.txt_movie_plot);
             mRtMovieRating = getActivity().findViewById(R.id.txt_movie_rating);
 
+            mTxtSynopsis = getActivity().findViewById(R.id.txt_synopsis);
+            mTxtCast = getActivity().findViewById(R.id.txt_cast);
+            mTxtReviews = getActivity().findViewById(R.id.txt_reviews);
+            mTxtSimilar = getActivity().findViewById(R.id.txt_similar);
+            mLayoutSynopsis = getActivity().findViewById(R.id.layout_overview);
+            mLayoutCast = getActivity().findViewById(R.id.layout_cast);
+
+            mRVCreditList = getActivity().findViewById(R.id.rv_cast);
+
             initRatingBar(mRtMovieRating);
 
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
 
+    private void initUIEvents() {
+        mTxtCast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.getMovieCreditList(483906, new OnCreditListLoadedCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Credit> credits) {
+                        mLayoutSynopsis.setVisibility(GONE);
+                        GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
+                        mRVCreditList.setLayoutManager(m);
+                        mRVCreditList.setAdapter(new CreditsRecyclerViewAdapter(getActivity(), credits));
+                    }
 
+                    @Override
+                    public void onError() {
+
+                    }
+                });
+            }
+        });
     }
 
     private void loadRoundedImageFromURL(ImageView imgView, String url) {
@@ -139,7 +187,6 @@ public class MovieDetailsFragment extends Fragment {
         //Color empty stars
         stars.getDrawable(0).setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), PorterDuff.Mode.SRC_IN);
     }
-
 
 
 }

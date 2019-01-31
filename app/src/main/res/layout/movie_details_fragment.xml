@@ -4,6 +4,7 @@
     android:id="@+id/movielist"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".ui.movielist.MovieDetailsFragment">
 
     <LinearLayout
@@ -31,6 +32,8 @@
                 android:layout_marginStart="25dp"
                 android:contentDescription="@string/movie_background"
                 android:scaleType="fitXY"
+                android:background="@drawable/shadow_drawable"
+                android:elevation="10dp"
                 android:src="@drawable/movie_poster_placeholder" />
 
             <LinearLayout
@@ -46,9 +49,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Aquaman"
-                    android:maxLines="2"
                     android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Aquaman"
                     android:textColor="@android:color/black"
                     android:textSize="24sp" />
 
@@ -57,8 +60,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:maxLines="2"
                     android:ellipsize="end"
+                    android:maxLines="2"
                     android:text="Drama | Action | Comedy"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp" />
@@ -329,6 +332,25 @@
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_cast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_cast"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>
