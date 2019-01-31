@@ -2,6 +2,7 @@ package khaledhaouas.com.tmdbmovies.ui.movielist;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -59,6 +61,13 @@ public class MovieDetailsFragment extends Fragment {
     private LinearLayout mLayoutCast;
     private TextView mTxtReviews;
     private TextView mTxtSimilar;
+    private LinearLayout mLayoutReviews;
+    private LinearLayout mLayoutSimilar;
+
+    private FrameLayout mPlotIndicator;
+    private FrameLayout mCastIndicator;
+    private FrameLayout mReviewsIndicator;
+    private FrameLayout mSimilarIndicator;
 
     private RecyclerView mRVCreditList;
 
@@ -130,6 +139,12 @@ public class MovieDetailsFragment extends Fragment {
             mTxtSimilar = getActivity().findViewById(R.id.txt_similar);
             mLayoutSynopsis = getActivity().findViewById(R.id.layout_overview);
             mLayoutCast = getActivity().findViewById(R.id.layout_cast);
+            mLayoutSimilar = getActivity().findViewById(R.id.layout_similar);
+            mLayoutReviews = getActivity().findViewById(R.id.layout_reviews);
+            mPlotIndicator = getActivity().findViewById(R.id.fr_plot_indicator);
+            mCastIndicator = getActivity().findViewById(R.id.fr_cast_indicator);
+            mReviewsIndicator = getActivity().findViewById(R.id.fr_reviews_indicator);
+            mSimilarIndicator = getActivity().findViewById(R.id.fr_similar_indicator);
 
             mRVCreditList = getActivity().findViewById(R.id.rv_cast);
 
@@ -142,13 +157,19 @@ public class MovieDetailsFragment extends Fragment {
     }
 
     private void initUIEvents() {
+        mTxtSynopsis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchSelectedSection(1);
+            }
+        });
         mTxtCast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mViewModel.getMovieCreditList(483906, new OnCreditListLoadedCallback() {
                     @Override
                     public void onSuccess(ArrayList<Credit> credits) {
-                        mLayoutSynopsis.setVisibility(GONE);
+                        switchSelectedSection(2);
                         GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
                         mRVCreditList.setLayoutManager(m);
                         mRVCreditList.setAdapter(new CreditsRecyclerViewAdapter(getActivity(), credits));
@@ -159,6 +180,20 @@ public class MovieDetailsFragment extends Fragment {
 
                     }
                 });
+            }
+        });
+
+        mTxtReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchSelectedSection(3);
+            }
+        });
+
+        mTxtSimilar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchSelectedSection(4);
             }
         });
     }
@@ -186,6 +221,78 @@ public class MovieDetailsFragment extends Fragment {
         stars.getDrawable(1).setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         //Color empty stars
         stars.getDrawable(0).setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), PorterDuff.Mode.SRC_IN);
+    }
+
+    private void switchSelectedSection(int sectionId) {
+        switch (sectionId) {
+            case 1:
+                mLayoutSynopsis.setVisibility(View.VISIBLE);
+                mLayoutReviews.setVisibility(GONE);
+                mLayoutSimilar.setVisibility(GONE);
+                mLayoutCast.setVisibility(View.GONE);
+
+                mPlotIndicator.setVisibility(View.VISIBLE);
+                mCastIndicator.setVisibility(GONE);
+                mReviewsIndicator.setVisibility(GONE);
+                mSimilarIndicator.setVisibility(GONE);
+
+                mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.BOLD);
+                mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.NORMAL);
+                mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.NORMAL);
+                mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.NORMAL);
+
+                break;
+            case 2:
+                mLayoutSynopsis.setVisibility(GONE);
+                mLayoutReviews.setVisibility(GONE);
+                mLayoutSimilar.setVisibility(GONE);
+                mLayoutCast.setVisibility(View.VISIBLE);
+
+                mPlotIndicator.setVisibility(GONE);
+                mCastIndicator.setVisibility(View.VISIBLE);
+                mReviewsIndicator.setVisibility(GONE);
+                mSimilarIndicator.setVisibility(GONE);
+
+                mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.NORMAL);
+                mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.BOLD);
+                mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.NORMAL);
+                mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.NORMAL);
+                break;
+            case 3:
+                mLayoutSynopsis.setVisibility(GONE);
+                mLayoutReviews.setVisibility(View.VISIBLE);
+                mLayoutSimilar.setVisibility(GONE);
+                mLayoutCast.setVisibility(View.GONE);
+
+                mPlotIndicator.setVisibility(GONE);
+                mCastIndicator.setVisibility(GONE);
+                mReviewsIndicator.setVisibility(View.VISIBLE);
+                mSimilarIndicator.setVisibility(GONE);
+
+                mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.NORMAL);
+                mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.NORMAL);
+                mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.BOLD);
+                mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.NORMAL);
+                break;
+            case 4:
+                mLayoutSynopsis.setVisibility(GONE);
+                mLayoutReviews.setVisibility(GONE);
+                mLayoutSimilar.setVisibility(View.VISIBLE);
+                mLayoutCast.setVisibility(View.GONE);
+
+                mPlotIndicator.setVisibility(GONE);
+                mCastIndicator.setVisibility(GONE);
+                mReviewsIndicator.setVisibility(GONE);
+                mSimilarIndicator.setVisibility(View.VISIBLE);
+
+                mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.NORMAL);
+                mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.NORMAL);
+                mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.NORMAL);
+                mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.BOLD);
+                break;
+            default:
+                break;
+        }
     }
 
 
