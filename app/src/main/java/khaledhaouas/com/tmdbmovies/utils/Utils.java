@@ -13,11 +13,11 @@ public class Utils {
     }
 
     public static String formatTimeFromMinutes(int minutes) {
-        String resTime ="";
-        if(minutes/60 != 0){
-            resTime = resTime+(minutes/60)+" hr "+resTime+(minutes%60)+ " min";
-        }else {
-            resTime = resTime+(minutes%60)+ " min";
+        String resTime = "";
+        if (minutes / 60 != 0) {
+            resTime = resTime + (minutes / 60) + " hr " + resTime + (minutes % 60) + " min";
+        } else {
+            resTime = resTime + (minutes % 60) + " min";
         }
         return resTime;
     }

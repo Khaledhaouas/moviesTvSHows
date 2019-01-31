@@ -41,7 +41,7 @@ public class MoviesRepos {
         try {
             resMovie.setId(jsonMovie.getInt("id"));
             resMovie.setBackgroundImageUrl("https://image.tmdb.org/t/p/w500" + jsonMovie.getString("backdrop_path"));
-            resMovie.setPosterImageUrl("https://image.tmdb.org/t/p/w500" + jsonMovie.getString("poster_path"));
+            resMovie.setPosterImageUrl("https://image.tmdb.org/t/p/w342" + jsonMovie.getString("poster_path"));
             resMovie.setTitle(jsonMovie.getString("title"));
             resMovie.setReleaseDate(jsonMovie.getString("release_date"));
             resMovie.setPlot(jsonMovie.getString("overview"));

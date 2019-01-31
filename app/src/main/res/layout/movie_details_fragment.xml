@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:contentDescription="@string/movie_background"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@drawable/movie_background_placeholder" />
 
             <ImageView
@@ -30,10 +30,10 @@
                 android:layout_height="190dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="25dp"
-                android:contentDescription="@string/movie_background"
-                android:scaleType="fitXY"
                 android:background="@drawable/shadow_drawable"
+                android:contentDescription="@string/movie_background"
                 android:elevation="10dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/movie_poster_placeholder" />
 
             <LinearLayout
@@ -349,7 +349,7 @@
                     android:id="@+id/rv_cast"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"/>
+                    android:nestedScrollingEnabled="false" />
             </RelativeLayout>
         </LinearLayout>
 
