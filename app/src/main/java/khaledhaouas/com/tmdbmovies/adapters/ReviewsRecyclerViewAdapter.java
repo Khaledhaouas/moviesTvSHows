@@ -6,16 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.R;
-import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Review;
 
 public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecyclerViewAdapter.ViewHolder> {
@@ -63,12 +58,21 @@ public class ReviewsRecyclerViewAdapter extends RecyclerView.Adapter<ReviewsRecy
             super(itemView);
             txtAuthor = itemView.findViewById(R.id.txt_review_author);
             txtContent = itemView.findViewById(R.id.txt_review_content);
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (txtContent.getMaxLines() == 100)
+                        txtContent.setMaxLines(6);
+                    else
+                        txtContent.setMaxLines(100);
+                }
+            });
         }
 
         @Override
         public void onClick(View view) {
 //            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+
         }
     }
 
