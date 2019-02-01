@@ -95,7 +95,7 @@ public class MovieDetailsFragment extends Fragment {
 
         initUIElements();
         initUIEvents();
-        mViewModel.getMovieDetails(483906, new OnMovieLoadedCallback() {
+        mViewModel.getMovieDetails(424783, new OnMovieLoadedCallback() {
             @Override
             public void onSuccess(Movie movie) {
 
@@ -166,20 +166,25 @@ public class MovieDetailsFragment extends Fragment {
         mTxtCast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mViewModel.getMovieCreditList(483906, new OnCreditListLoadedCallback() {
-                    @Override
-                    public void onSuccess(ArrayList<Credit> credits) {
-                        switchSelectedSection(2);
-                        GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
-                        mRVCreditList.setLayoutManager(m);
-                        mRVCreditList.setAdapter(new CreditsRecyclerViewAdapter(getActivity(), credits));
-                    }
+                if (mViewModel.getCredits().isEmpty()) {
+                    mViewModel.getMovieCreditList(424783, new OnCreditListLoadedCallback() {
+                        @Override
+                        public void onSuccess(ArrayList<Credit> credits) {
+                            switchSelectedSection(2);
+                            GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
+                            mRVCreditList.setLayoutManager(m);
+                            mRVCreditList.setAdapter(new CreditsRecyclerViewAdapter(getActivity(), credits));
+                        }
 
-                    @Override
-                    public void onError() {
+                        @Override
+                        public void onError() {
 
-                    }
-                });
+                        }
+                    });
+                } else {
+                    switchSelectedSection(2);
+                }
+
             }
         });
 

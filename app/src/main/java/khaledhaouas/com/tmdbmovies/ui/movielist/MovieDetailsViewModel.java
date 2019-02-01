@@ -16,15 +16,21 @@ public class MovieDetailsViewModel extends ViewModel {
     private MoviesRepos mMovieRepos;
     private CreditsRepos mCreditRepos;
 
+    private Movie mMovie;
+    private ArrayList<Credit> mCredits;
+
     public MovieDetailsViewModel() {
         mMovieRepos = new MoviesRepos();
         mCreditRepos = new CreditsRepos();
+
+        mCredits = new ArrayList<>();
     }
 
     public void getMovieDetails(int id, final OnMovieLoadedCallback callback) {
         mMovieRepos.getMovieDetails(id, new OnMovieLoadedCallback() {
             @Override
             public void onSuccess(Movie movie) {
+                mMovie = movie;
                 callback.onSuccess(movie);
             }
 
@@ -40,6 +46,8 @@ public class MovieDetailsViewModel extends ViewModel {
         mCreditRepos.getMovieCreditsList(id, new OnCreditListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Credit> credits) {
+                mCredits.clear();
+                mCredits.addAll(credits);
                 callback.onSuccess(credits);
             }
 
@@ -50,5 +58,11 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
+    public Movie getMovie() {
+        return mMovie;
+    }
 
+    public ArrayList<Credit> getCredits() {
+        return mCredits;
+    }
 }
