@@ -392,6 +392,12 @@
             android:orientation="vertical"
             android:visibility="gone">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -401,6 +407,13 @@
             android:layout_marginStart="15dp"
             android:orientation="vertical"
             android:visibility="gone">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_similar_movies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
 
         </LinearLayout>
 

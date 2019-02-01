@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +31,13 @@ import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.R;
 import khaledhaouas.com.tmdbmovies.adapters.CreditsRecyclerViewAdapter;
+import khaledhaouas.com.tmdbmovies.adapters.ReviewsRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
+import khaledhaouas.com.tmdbmovies.models.entities.Review;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
 import static android.view.View.GONE;
@@ -70,6 +74,7 @@ public class MovieDetailsFragment extends Fragment {
     private FrameLayout mSimilarIndicator;
 
     private RecyclerView mRVCreditList;
+    private RecyclerView mRVReviewList;
 
     public static MovieDetailsFragment newInstance() {
         return new MovieDetailsFragment();
@@ -147,6 +152,7 @@ public class MovieDetailsFragment extends Fragment {
             mSimilarIndicator = getActivity().findViewById(R.id.fr_similar_indicator);
 
             mRVCreditList = getActivity().findViewById(R.id.rv_cast);
+            mRVReviewList = getActivity().findViewById(R.id.rv_reviews);
 
             initRatingBar(mRtMovieRating);
 
@@ -191,7 +197,24 @@ public class MovieDetailsFragment extends Fragment {
         mTxtReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchSelectedSection(3);
+                if (mViewModel.getCredits().isEmpty()) {
+                    mViewModel.getMovieReviewList(297802, new OnReviewListLoadedCallback() {
+                        @Override
+                        public void onSuccess(ArrayList<Review> reviews) {
+                            switchSelectedSection(3);
+//                            GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
+                            mRVReviewList.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL ,false));
+                            mRVReviewList.setAdapter(new ReviewsRecyclerViewAdapter(getActivity(), reviews));
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+                } else {
+                    switchSelectedSection(3);
+                }
             }
         });
 
