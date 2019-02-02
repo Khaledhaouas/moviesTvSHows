@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
 import khaledhaouas.com.tmdbmovies.models.entities.Review;
+import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnSimilarMoviesListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.repositories.CreditsRepos;
 import khaledhaouas.com.tmdbmovies.models.repositories.MoviesRepos;
 import khaledhaouas.com.tmdbmovies.models.repositories.ReviewsRepos;
@@ -91,6 +93,20 @@ public class MovieDetailsViewModel extends ViewModel {
                 mSimilarMovies.clear();
                 mSimilarMovies.addAll(movies);
                 callback.onSuccess(movies);
+            }
+
+            @Override
+            public void onError() {
+                callback.onError();
+            }
+        });
+    }
+
+    public void getMovieVideosList(int id, final OnVideoListLoadedCallback callback) {
+        mMovieRepos.getMovieVideosList(id, new OnVideoListLoadedCallback() {
+            @Override
+            public void onSuccess(ArrayList<Video> videos) {
+                callback.onSuccess(videos);
             }
 
             @Override

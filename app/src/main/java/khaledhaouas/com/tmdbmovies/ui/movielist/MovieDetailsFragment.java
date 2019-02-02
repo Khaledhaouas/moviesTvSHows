@@ -33,16 +33,21 @@ import khaledhaouas.com.tmdbmovies.R;
 import khaledhaouas.com.tmdbmovies.adapters.CreditsRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.adapters.MoviesRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.adapters.ReviewsRecyclerViewAdapter;
+import khaledhaouas.com.tmdbmovies.adapters.VideosRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
 import khaledhaouas.com.tmdbmovies.models.entities.Review;
+import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnSimilarMoviesListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
 import static android.view.View.GONE;
+
+//import com.google.android.youtube.player.YouTubePlayerView;
 
 public class MovieDetailsFragment extends Fragment {
     private static final String TAG = "MovieDetailsFragment";
@@ -75,6 +80,7 @@ public class MovieDetailsFragment extends Fragment {
     private FrameLayout mReviewsIndicator;
     private FrameLayout mSimilarIndicator;
 
+    private RecyclerView mRVVideosList;
     private RecyclerView mRVCreditList;
     private RecyclerView mRVReviewList;
     private RecyclerView mRVSimilarMoviesList;
@@ -103,6 +109,7 @@ public class MovieDetailsFragment extends Fragment {
 
         initUIElements();
         initUIEvents();
+
         mViewModel.getMovieDetails(424783, new OnMovieLoadedCallback() {
             @Override
             public void onSuccess(Movie movie) {
@@ -125,6 +132,18 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
 
+        mViewModel.getMovieVideosList(424783, new OnVideoListLoadedCallback() {
+            @Override
+            public void onSuccess(ArrayList<Video> videos) {
+                mRVVideosList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                mRVVideosList.setAdapter(new VideosRecyclerViewAdapter(getActivity(), videos));
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
 
     }
 
@@ -154,6 +173,7 @@ public class MovieDetailsFragment extends Fragment {
             mReviewsIndicator = getActivity().findViewById(R.id.fr_reviews_indicator);
             mSimilarIndicator = getActivity().findViewById(R.id.fr_similar_indicator);
 
+            mRVVideosList = getActivity().findViewById(R.id.rv_videos);
             mRVCreditList = getActivity().findViewById(R.id.rv_cast);
             mRVReviewList = getActivity().findViewById(R.id.rv_reviews);
             mRVSimilarMoviesList = getActivity().findViewById(R.id.rv_similar_movies);

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiManager;
 import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiServerCallback;
 import khaledhaouas.com.tmdbmovies.managers.ConfigManager;
-import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnSimilarMoviesListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
 
 public class MoviesRepos {
     private static final String TAG = "MoviesRepos";
@@ -120,6 +120,50 @@ public class MoviesRepos {
             }
 
             return movies;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+    public void getMovieVideosList(int id, final OnVideoListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "movie/" + id + "/videos" + ConfigManager.getInstance().addApiKeyToRequest();
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Video> videos = parseJsonToVideosList(result);
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(videos);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
+    private ArrayList<Video> parseJsonToVideosList(JSONObject jsonVideos) {
+        ArrayList<Video> videos = new ArrayList<>();
+        try {
+            JSONArray videosJsonArray = jsonVideos.getJSONArray("results");
+            for (int i = 0; i < videosJsonArray.length(); i++) {
+                Video resVideo = new Video();
+                resVideo.setId(videosJsonArray.getJSONObject(i).getString("id"));
+                resVideo.setName(videosJsonArray.getJSONObject(i).getString("name"));
+                resVideo.setType(videosJsonArray.getJSONObject(i).getString("type"));
+                resVideo.setUrlKey(videosJsonArray.getJSONObject(i).getString("key"));
+                videos.add(resVideo);
+                Log.e(TAG, videos.toString());
+            }
+
+            return videos;
         } catch (JSONException e) {
             e.printStackTrace();
         }

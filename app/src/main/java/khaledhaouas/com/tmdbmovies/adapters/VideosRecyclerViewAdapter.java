@@ -6,28 +6,28 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.YouTubePlayerView;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubePlayerInitListener;
 
 import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.R;
-import khaledhaouas.com.tmdbmovies.models.entities.Credit;
-import khaledhaouas.com.tmdbmovies.models.entities.Movie;
+import khaledhaouas.com.tmdbmovies.models.entities.Review;
+import khaledhaouas.com.tmdbmovies.models.entities.Video;
 
-public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder> {
+public class VideosRecyclerViewAdapter extends RecyclerView.Adapter<VideosRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Movie> mData;
+    private ArrayList<Video> mData;
     private LayoutInflater mInflater;
     private Context mContext;
 //    private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public MoviesRecyclerViewAdapter(Context context, ArrayList<Movie> data) {
+    public VideosRecyclerViewAdapter(Context context, ArrayList<Video> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.mContext = context;
@@ -37,23 +37,27 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.rv_item_movie, parent, false);
+        View view = mInflater.inflate(R.layout.rv_item_video, parent, false);
         return new ViewHolder(view);
     }
 
     // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(mContext)
-                .load(mData.get(position).getPosterImageUrl())
-                .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
-                .into(holder.mImgMoviePoster);
-
-        holder.mTxtMovieTitle.setText(mData.get(position).getTitle());
-//        holder.mTxtMovieGenres.setText(mData.get(position).getGenres());
-        holder.mRtMovieRating.setRating((float) mData.get(position).getRating() / 2);
-        holder.mTxtMovieReviewNbrs.setText(mData.get(position).getReviewNbrs() + "");
-        holder.mTxtMovieReleaseDate.setText(mData.get(position).getReleaseDate());
+        final int pos = position;
+        holder.txtVideoTitle.setText(mData.get(position).getName());
+        holder.youtubePlayerView.initialize(new YouTubePlayerInitListener() {
+            @Override
+            public void onInitSuccess(@NonNull final YouTubePlayer initializedYouTubePlayer) {
+                initializedYouTubePlayer.addListener(new AbstractYouTubePlayerListener() {
+                    @Override
+                    public void onReady() {
+                        String videoId = mData.get(pos).getUrlKey();
+                        initializedYouTubePlayer.cueVideo(videoId, 0);
+                    }
+                });
+            }
+        }, true);
     }
 
     // total number of cells
@@ -65,28 +69,19 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView mImgMoviePoster;
-        TextView mTxtMovieTitle;
-//        TextView mTxtMovieGenres;
-        RatingBar mRtMovieRating;
-        TextView mTxtMovieReviewNbrs;
-        TextView mTxtMovieReleaseDate;
+        TextView txtVideoTitle;
+        YouTubePlayerView youtubePlayerView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            mImgMoviePoster = itemView.findViewById(R.id.img_movie_poster);
-            mTxtMovieTitle = itemView.findViewById(R.id.txt_movie_title);
-//            mTxtMovieGenres = itemView.findViewById(R.id.txt_movie_genres);
-            mTxtMovieReviewNbrs = itemView.findViewById(R.id.txt_movie_reviews_nbre);
-            mTxtMovieReleaseDate = itemView.findViewById(R.id.txt_movie_release_date);
-            mRtMovieRating = itemView.findViewById(R.id.txt_movie_rating);
-
-            itemView.setOnClickListener(this);
+            txtVideoTitle = itemView.findViewById(R.id.txt_video_title);
+            youtubePlayerView = itemView.findViewById(R.id.youtube_player_view);
         }
 
         @Override
         public void onClick(View view) {
 //            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+
         }
     }
 
