@@ -14,7 +14,7 @@ import khaledhaouas.com.tmdbmovies.managers.ConfigManager;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnSimilarMoviesListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
 
 public class MoviesRepos {
@@ -77,8 +77,29 @@ public class MoviesRepos {
     }
 
 
-    public void getSimilarMoviesList(int id, final OnSimilarMoviesListLoadedCallback callback) {
+    public void getSimilarMoviesList(int id, final OnMoviesListLoadedCallback callback) {
         String url = ConfigManager.getInstance().getAppRoot() + "movie/" + id + "/similar" + ConfigManager.getInstance().addApiKeyToRequest();
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Movie> movies = parseJsonToMoviesList(result);
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(movies);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
+    public void getMoviesList(String movieListType, final OnMoviesListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "movie/" + movieListType + ConfigManager.getInstance().addApiKeyToRequest();
         Log.e(TAG, "onCreate: " + url);
         ApiManager.getsInstance().GET(url, new ApiServerCallback() {
             @Override

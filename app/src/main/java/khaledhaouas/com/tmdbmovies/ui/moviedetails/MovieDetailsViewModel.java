@@ -1,4 +1,4 @@
-package khaledhaouas.com.tmdbmovies.ui.movielist;
+package khaledhaouas.com.tmdbmovies.ui.moviedetails;
 
 import android.arch.lifecycle.ViewModel;
 
@@ -10,8 +10,8 @@ import khaledhaouas.com.tmdbmovies.models.entities.Review;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnSimilarMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.repositories.CreditsRepos;
 import khaledhaouas.com.tmdbmovies.models.repositories.MoviesRepos;
@@ -86,8 +86,8 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public void getSimilarMoviesList(int id, final OnSimilarMoviesListLoadedCallback callback) {
-        mMovieRepos.getSimilarMoviesList(id, new OnSimilarMoviesListLoadedCallback() {
+    public void getSimilarMoviesList(int id, final OnMoviesListLoadedCallback callback) {
+        mMovieRepos.getSimilarMoviesList(id, new OnMoviesListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Movie> movies) {
                 mSimilarMovies.clear();

@@ -1,14 +1,11 @@
-package khaledhaouas.com.tmdbmovies.ui.movielist;
+package khaledhaouas.com.tmdbmovies.ui.moviedetails;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,7 +40,7 @@ import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnSimilarMoviesListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
@@ -265,7 +262,7 @@ public class MovieDetailsFragment extends Fragment {
             public void onClick(View v) {
 
                 if (mViewModel.getmSimilarMovies().isEmpty()) {
-                    mViewModel.getSimilarMoviesList(mMovieId, new OnSimilarMoviesListLoadedCallback() {
+                    mViewModel.getSimilarMoviesList(mMovieId, new OnMoviesListLoadedCallback() {
                         @Override
                         public void onSuccess(final ArrayList<Movie> movies) {
                             switchSelectedSection(4);
