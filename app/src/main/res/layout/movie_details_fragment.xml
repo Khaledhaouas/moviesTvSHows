@@ -11,8 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,8 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:contentDescription="@string/movie_background"
-                android:scaleType="centerCrop"
-                />
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -56,8 +55,7 @@
                     android:layout_height="190dp"
                     android:contentDescription="@string/movie_background"
                     android:elevation="10dp"
-                    android:scaleType="centerCrop"
-                     />
+                    android:scaleType="centerCrop" />
             </android.support.v7.widget.CardView>
 
 
@@ -76,7 +74,6 @@
                     android:layout_marginTop="10dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="Aquaman"
                     android:textColor="@android:color/black"
                     android:textSize="24sp" />
 
@@ -87,7 +84,6 @@
                     android:layout_marginTop="5dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="Drama | Action | Comedy"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="12sp" />
 
@@ -112,7 +108,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="1299"
                         android:textColor="@android:color/black"
                         android:textSize="12sp" />
 
@@ -274,7 +269,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        android:text="March 29, 2019"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -305,7 +299,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        android:text="English"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -336,7 +329,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        android:text="1 hr 58 min"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -359,7 +351,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:text="Once home to the most advanced civilization on Earth, the city of Atlantis is now an underwater kingdom ruled by the power-hungry King Orm. With a vast army at his disposal, Orm plans to conquer the remaining oceanic people -- and then the surface world. Standing in his way is Aquaman, Orm's half-human, half-Atlantean brother and true heir to the throne. With help from royal counselor Vulko, Aquaman must retrieve the legendary Trident of Atlan and embrace his destiny as protector of the deep."
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
 
@@ -417,11 +408,12 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_reviews"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
 
             </RelativeLayout>
 
@@ -433,18 +425,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_similar_movies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_similar_movies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
             </RelativeLayout>
 
         </LinearLayout>
-
 
 
     </LinearLayout>

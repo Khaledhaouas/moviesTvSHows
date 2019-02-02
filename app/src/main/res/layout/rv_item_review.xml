@@ -29,7 +29,6 @@
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Ayisha Issa"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -49,7 +48,6 @@
                 android:ellipsize="end"
                 android:layout_margin="5dp"
                 android:maxLines="6"
-                android:text="***Lame-axx butt of a joke no longer*** \r\n\r\nArthur Curry (Jason Momoa) lives with his father on the Maine Coast, a caretaker of a lighthouse. With the mentorship of Vulko (Willem Dafoe) and the revelations of Mera (Amber Heard) he discovers that he is the half-breed heir to the underwater kingdom of Atlantis. As the rightful successor to the throne, he must tangle with his brother Orm (Patrick Wilson) to save the surface world from destruction. Meanwhile Black Manta (Yahya Abdul-Mateen II) seeks vengeance on Arthur for the death of his father.\r\n\r\n“Aquaman” (2018) is a colorful superhero flick featuring a flashy action scene for every 5 minute lull. It’s reminiscent of “Thor” (2011) and “Thor: The Dark World” (2013), but with spectacular undersea realms instead of Asgard and realms nearby. Yet the drama was better in those movies whereas here it feels like the creators were in a rush to jump to the next action sequence, which might make “Aquaman” ‘thrilling,’ but less compelling story-wise.\r\n\r\nStill, it’s very eventful with loads of energy (maybe TOO eventful for its own good). And I liked the balance of underwater scenes to surface scenes with spectacular locations, including the Sahara Desert and Sicily. Meanwhile Amber is stunning as redheaded Mera. Even Nicole Kidman shows up as Arthur’s mother, Atlanna. Speaking of Arthur, Momoa is magnificent as the protagonist and will forever change the public’s generally weak perception of Aquaman.\r\n\r\nThe film is a bit overlong at 2 hour, 23 minutes; and was shot in Australia (Hastings Point, Amity Point, Southport, Main Beach and Currumbin Beach); Newfoundland and Labrador, Canada; and Morocco (Erfoud and Merzouga).\r\n\r\nGRADE: B"
                 android:textColor="#757575"
                 android:textSize="13sp" />
         </LinearLayout>

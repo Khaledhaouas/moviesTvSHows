@@ -28,7 +28,6 @@
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:text="Ayisha Issa"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 
@@ -40,7 +39,6 @@
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:text="Jazmin"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp" />
 
