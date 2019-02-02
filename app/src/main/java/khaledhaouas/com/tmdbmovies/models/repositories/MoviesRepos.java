@@ -52,7 +52,12 @@ public class MoviesRepos {
             resMovie.setPlot(jsonMovie.getString("overview"));
             resMovie.setReviewNbrs(jsonMovie.getInt("vote_count"));
             resMovie.setRating(jsonMovie.getDouble("vote_average"));
-            resMovie.setRunTime(jsonMovie.getInt("runtime"));
+            try {
+                resMovie.setRunTime(jsonMovie.getInt("runtime"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             resMovie.setLanguage(jsonMovie.getString("original_language"));
             StringBuilder genres = new StringBuilder();
             JSONArray genresArray = jsonMovie.getJSONArray("genres");
