@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.R;
 import khaledhaouas.com.tmdbmovies.adapters.CreditsRecyclerViewAdapter;
+import khaledhaouas.com.tmdbmovies.adapters.MoviesRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.adapters.ReviewsRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
@@ -38,6 +39,7 @@ import khaledhaouas.com.tmdbmovies.models.entities.Review;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnSimilarMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
 import static android.view.View.GONE;
@@ -75,6 +77,7 @@ public class MovieDetailsFragment extends Fragment {
 
     private RecyclerView mRVCreditList;
     private RecyclerView mRVReviewList;
+    private RecyclerView mRVSimilarMoviesList;
 
     public static MovieDetailsFragment newInstance() {
         return new MovieDetailsFragment();
@@ -153,7 +156,7 @@ public class MovieDetailsFragment extends Fragment {
 
             mRVCreditList = getActivity().findViewById(R.id.rv_cast);
             mRVReviewList = getActivity().findViewById(R.id.rv_reviews);
-
+            mRVSimilarMoviesList = getActivity().findViewById(R.id.rv_similar_movies);
             initRatingBar(mRtMovieRating);
 
 
@@ -197,13 +200,13 @@ public class MovieDetailsFragment extends Fragment {
         mTxtReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mViewModel.getCredits().isEmpty()) {
+                if (mViewModel.getmReviews().isEmpty()) {
                     mViewModel.getMovieReviewList(297802, new OnReviewListLoadedCallback() {
                         @Override
                         public void onSuccess(ArrayList<Review> reviews) {
                             switchSelectedSection(3);
 //                            GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
-                            mRVReviewList.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL ,false));
+                            mRVReviewList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                             mRVReviewList.setAdapter(new ReviewsRecyclerViewAdapter(getActivity(), reviews));
                         }
 
@@ -221,7 +224,25 @@ public class MovieDetailsFragment extends Fragment {
         mTxtSimilar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchSelectedSection(4);
+
+                if (mViewModel.getmSimilarMovies().isEmpty()) {
+                    mViewModel.getSimilarMoviesList(297802, new OnSimilarMoviesListLoadedCallback() {
+                        @Override
+                        public void onSuccess(ArrayList<Movie> movies) {
+                            switchSelectedSection(4);
+//                            GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
+                            mRVSimilarMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                            mRVSimilarMoviesList.setAdapter(new MoviesRecyclerViewAdapter(getActivity(), movies));
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+                } else {
+                    switchSelectedSection(4);
+                }
             }
         });
     }

@@ -6,11 +6,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiManager;
 import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiServerCallback;
 import khaledhaouas.com.tmdbmovies.managers.ConfigManager;
+import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnSimilarMoviesListLoadedCallback;
 
 public class MoviesRepos {
     private static final String TAG = "MoviesRepos";
@@ -58,6 +63,63 @@ public class MoviesRepos {
             resMovie.setGenres(genres.toString());
 
             return resMovie;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+
+    public void getSimilarMoviesList(int id, final OnSimilarMoviesListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "movie/" + id + "/similar" + ConfigManager.getInstance().addApiKeyToRequest();
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Movie> movies = parseJsonToMoviesList(result);
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(movies);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
+    private ArrayList<Movie> parseJsonToMoviesList(JSONObject jsonMovies) {
+        ArrayList<Movie> movies = new ArrayList<>();
+        try {
+            JSONArray moviesJsonArray = jsonMovies.getJSONArray("results");
+            for (int i = 0; i < moviesJsonArray.length(); i++) {
+                Movie resMovie = new Movie();
+                resMovie.setId(moviesJsonArray.getJSONObject(i).getInt("id"));
+                resMovie.setPosterImageUrl("https://image.tmdb.org/t/p/w185" + moviesJsonArray.getJSONObject(i).getString("poster_path"));
+                resMovie.setTitle(moviesJsonArray.getJSONObject(i).getString("title"));
+                resMovie.setReleaseDate(moviesJsonArray.getJSONObject(i).getString("release_date"));
+                resMovie.setPlot(moviesJsonArray.getJSONObject(i).getString("overview"));
+                resMovie.setReviewNbrs(moviesJsonArray.getJSONObject(i).getInt("vote_count"));
+                resMovie.setRating(moviesJsonArray.getJSONObject(i).getDouble("vote_average"));
+                resMovie.setLanguage(moviesJsonArray.getJSONObject(i).getString("original_language"));
+                StringBuilder genres = new StringBuilder();
+//                JSONArray genresArray = moviesJsonArray.getJSONObject(i).getJSONArray("genre_ids");
+//                for (int j = 0; j < genresArray.length(); j++) {
+//                    genres.append(((JSONObject) genresArray.get(j)).getInt("name")).append("|");
+//                }
+//                genres.deleteCharAt(genres.toString().length() - 1);
+                //                    genres.append(((JSONObject) genresArray.get(j)).getInt("name")).append("|");
+                resMovie.setGenres(genres.toString());
+                movies.add(resMovie);
+                Log.e(TAG, movies.toString());
+            }
+
+            return movies;
         } catch (JSONException e) {
             e.printStackTrace();
         }
