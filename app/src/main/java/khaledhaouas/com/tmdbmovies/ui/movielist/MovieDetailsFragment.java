@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -57,6 +59,8 @@ public class MovieDetailsFragment extends Fragment {
     private MovieDetailsViewModel mViewModel;
 
     //UI elements
+    private ScrollView mScrollViewMainContent;
+
     private ImageView mImgMovieBackground;
     private ImageView mImgMoviePoster;
     private TextView mTxtMovieTitle;
@@ -100,6 +104,10 @@ public class MovieDetailsFragment extends Fragment {
         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
+        if (getArguments() != null) {
+            mMovieId = getArguments().getInt("MovieId");
+        }
         return v;
     }
 
@@ -151,6 +159,8 @@ public class MovieDetailsFragment extends Fragment {
 
     private void initUIElements() {
         try {
+            mScrollViewMainContent = getActivity().findViewById(R.id.scroll_movie_details);
+
             mImgMovieBackground = getActivity().findViewById(R.id.img_movie_background);
             mImgMoviePoster = getActivity().findViewById(R.id.img_movie_poster);
             mTxtMovieTitle = getActivity().findViewById(R.id.txt_movie_title);
@@ -205,6 +215,7 @@ public class MovieDetailsFragment extends Fragment {
                             GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
                             mRVCreditList.setLayoutManager(m);
                             mRVCreditList.setAdapter(new CreditsRecyclerViewAdapter(getActivity(), credits));
+                            mScrollViewMainContent.fullScroll(View.FOCUS_UP);
                         }
 
                         @Override
@@ -230,6 +241,7 @@ public class MovieDetailsFragment extends Fragment {
 //                            GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
                             mRVReviewList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                             mRVReviewList.setAdapter(new ReviewsRecyclerViewAdapter(getActivity(), reviews));
+                            mScrollViewMainContent.fullScroll(View.FOCUS_UP);
                         }
 
                         @Override
@@ -250,11 +262,27 @@ public class MovieDetailsFragment extends Fragment {
                 if (mViewModel.getmSimilarMovies().isEmpty()) {
                     mViewModel.getSimilarMoviesList(mMovieId, new OnSimilarMoviesListLoadedCallback() {
                         @Override
-                        public void onSuccess(ArrayList<Movie> movies) {
+                        public void onSuccess(final ArrayList<Movie> movies) {
                             switchSelectedSection(4);
 //                            GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
                             mRVSimilarMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                            mRVSimilarMoviesList.setAdapter(new MoviesRecyclerViewAdapter(getActivity(), movies));
+                            MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
+                            moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
+                                    MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                                    Bundle args = new Bundle();
+                                    args.putInt("MovieId", movies.get(position).getId());
+                                    movieDetailsFragment.setArguments(args);
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.container, movieDetailsFragment)
+                                            .commitNow();
+                                }
+                            });
+                            mRVSimilarMoviesList.setAdapter(moviesRecyclerViewAdapter);
+                            mScrollViewMainContent.fullScroll(View.FOCUS_UP);
+
                         }
 
                         @Override

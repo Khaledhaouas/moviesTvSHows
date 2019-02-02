@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/movielist"
+    android:id="@+id/scroll_movie_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -411,7 +411,6 @@
             android:id="@+id/layout_reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:orientation="vertical"
             android:visibility="gone">
 
@@ -432,7 +431,6 @@
             android:id="@+id/layout_similar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:orientation="vertical"
             android:visibility="gone">
             <RelativeLayout
