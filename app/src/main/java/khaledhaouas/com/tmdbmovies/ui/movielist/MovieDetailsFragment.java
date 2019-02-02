@@ -336,9 +336,9 @@ public class MovieDetailsFragment extends Fragment {
                 mSimilarIndicator.setVisibility(GONE);
 
                 mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.BOLD);
-                mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.NORMAL);
-                mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.NORMAL);
-                mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.NORMAL);
+                mTxtCast.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
+                mTxtReviews.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
+                mTxtSimilar.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
 
                 break;
             case 2:
@@ -352,10 +352,10 @@ public class MovieDetailsFragment extends Fragment {
                 mReviewsIndicator.setVisibility(GONE);
                 mSimilarIndicator.setVisibility(GONE);
 
-                mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.NORMAL);
+                mTxtSynopsis.setTypeface(Typeface.create(mTxtSynopsis.getTypeface(), Typeface.NORMAL));
                 mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.BOLD);
-                mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.NORMAL);
-                mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.NORMAL);
+                mTxtReviews.setTypeface(Typeface.create(mTxtReviews.getTypeface(), Typeface.NORMAL));
+                mTxtSimilar.setTypeface(Typeface.create(mTxtSimilar.getTypeface(), Typeface.NORMAL));
                 break;
             case 3:
                 mLayoutSynopsis.setVisibility(GONE);
@@ -368,10 +368,10 @@ public class MovieDetailsFragment extends Fragment {
                 mReviewsIndicator.setVisibility(View.VISIBLE);
                 mSimilarIndicator.setVisibility(GONE);
 
-                mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.NORMAL);
-                mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.NORMAL);
+                mTxtSynopsis.setTypeface(Typeface.create(mTxtSynopsis.getTypeface(), Typeface.NORMAL));
+                mTxtCast.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
                 mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.BOLD);
-                mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.NORMAL);
+                mTxtSimilar.setTypeface(Typeface.create(mTxtSimilar.getTypeface(), Typeface.NORMAL));
                 break;
             case 4:
                 mLayoutSynopsis.setVisibility(GONE);
@@ -384,9 +384,9 @@ public class MovieDetailsFragment extends Fragment {
                 mReviewsIndicator.setVisibility(GONE);
                 mSimilarIndicator.setVisibility(View.VISIBLE);
 
-                mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.NORMAL);
-                mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.NORMAL);
-                mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.NORMAL);
+                mTxtSynopsis.setTypeface(Typeface.create(mTxtSynopsis.getTypeface(), Typeface.NORMAL));
+                mTxtCast.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
+                mTxtReviews.setTypeface(Typeface.create(mTxtReviews.getTypeface(), Typeface.NORMAL));
                 mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.BOLD);
                 break;
             default:
