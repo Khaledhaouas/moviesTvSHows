@@ -52,6 +52,8 @@ import static android.view.View.GONE;
 public class MovieDetailsFragment extends Fragment {
     private static final String TAG = "MovieDetailsFragment";
 
+    private int mMovieId = 450465;
+
     private MovieDetailsViewModel mViewModel;
 
     //UI elements
@@ -110,7 +112,7 @@ public class MovieDetailsFragment extends Fragment {
         initUIElements();
         initUIEvents();
 
-        mViewModel.getMovieDetails(424783, new OnMovieLoadedCallback() {
+        mViewModel.getMovieDetails(mMovieId, new OnMovieLoadedCallback() {
             @Override
             public void onSuccess(Movie movie) {
 
@@ -132,7 +134,7 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
 
-        mViewModel.getMovieVideosList(424783, new OnVideoListLoadedCallback() {
+        mViewModel.getMovieVideosList(mMovieId, new OnVideoListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Video> videos) {
                 mRVVideosList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -196,7 +198,7 @@ public class MovieDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mViewModel.getCredits().isEmpty()) {
-                    mViewModel.getMovieCreditList(424783, new OnCreditListLoadedCallback() {
+                    mViewModel.getMovieCreditList(mMovieId, new OnCreditListLoadedCallback() {
                         @Override
                         public void onSuccess(ArrayList<Credit> credits) {
                             switchSelectedSection(2);
@@ -221,7 +223,7 @@ public class MovieDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mViewModel.getmReviews().isEmpty()) {
-                    mViewModel.getMovieReviewList(297802, new OnReviewListLoadedCallback() {
+                    mViewModel.getMovieReviewList(mMovieId, new OnReviewListLoadedCallback() {
                         @Override
                         public void onSuccess(ArrayList<Review> reviews) {
                             switchSelectedSection(3);
@@ -246,7 +248,7 @@ public class MovieDetailsFragment extends Fragment {
             public void onClick(View v) {
 
                 if (mViewModel.getmSimilarMovies().isEmpty()) {
-                    mViewModel.getSimilarMoviesList(297802, new OnSimilarMoviesListLoadedCallback() {
+                    mViewModel.getSimilarMoviesList(mMovieId, new OnSimilarMoviesListLoadedCallback() {
                         @Override
                         public void onSuccess(ArrayList<Movie> movies) {
                             switchSelectedSection(4);
