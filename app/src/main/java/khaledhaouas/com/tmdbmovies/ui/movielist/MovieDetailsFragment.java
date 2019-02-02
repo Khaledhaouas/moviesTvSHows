@@ -191,7 +191,7 @@ public class MovieDetailsFragment extends Fragment {
             mRVReviewList = getActivity().findViewById(R.id.rv_reviews);
             mRVSimilarMoviesList = getActivity().findViewById(R.id.rv_similar_movies);
             mImgEmpty = getActivity().findViewById(R.id.img_empty);
-            initRatingBar(mRtMovieRating);
+            Utils.initRatingBar(getActivity(), mRtMovieRating);
 
 
         } catch (Exception ex) {
@@ -322,15 +322,6 @@ public class MovieDetailsFragment extends Fragment {
                 .into(imgView);
     }
 
-    private void initRatingBar(RatingBar rating) {
-        LayerDrawable stars = (LayerDrawable) rating.getProgressDrawable();
-        //Color filled stars
-        stars.getDrawable(2).setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        //Color half filled stars
-        stars.getDrawable(1).setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        //Color empty stars
-        stars.getDrawable(0).setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey), PorterDuff.Mode.SRC_IN);
-    }
 
     private void switchSelectedSection(int sectionId) {
         switch (sectionId) {

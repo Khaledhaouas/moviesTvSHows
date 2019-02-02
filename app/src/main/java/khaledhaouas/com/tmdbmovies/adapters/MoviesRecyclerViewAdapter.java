@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import khaledhaouas.com.tmdbmovies.R;
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
+import khaledhaouas.com.tmdbmovies.utils.Utils;
 
 public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder> {
 
@@ -44,6 +45,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Utils.initRatingBar(mContext, holder.mRtMovieRating);
+
         Glide.with(mContext)
                 .load(mData.get(position).getPosterImageUrl())
                 .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
@@ -54,6 +57,8 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         holder.mRtMovieRating.setRating((float) mData.get(position).getRating() / 2);
         holder.mTxtMovieReviewNbrs.setText(mData.get(position).getReviewNbrs() + "");
         holder.mTxtMovieReleaseDate.setText(mData.get(position).getReleaseDate());
+
+
     }
 
     // total number of cells
@@ -90,17 +95,17 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
         }
     }
 
-//     convenience method for getting data at click position
+    //     convenience method for getting data at click position
     public Movie getItem(int id) {
         return mData.get(id);
     }
 
-//     allows clicks events to be caught
+    //     allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
-//     parent activity will implement this method to respond to click events
+    //     parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }

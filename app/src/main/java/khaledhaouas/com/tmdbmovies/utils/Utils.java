@@ -1,9 +1,15 @@
 package khaledhaouas.com.tmdbmovies.utils;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.widget.RatingBar;
 
 import java.util.Locale;
+
+import khaledhaouas.com.tmdbmovies.R;
 
 public class Utils {
 
@@ -26,5 +32,15 @@ public class Utils {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         return (int) (dpWidth / 180);
+    }
+
+    public static void initRatingBar(Context context, RatingBar rating) {
+        LayerDrawable stars = (LayerDrawable) rating.getProgressDrawable();
+        //Color filled stars
+        stars.getDrawable(2).setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+        //Color half filled stars
+        stars.getDrawable(1).setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+        //Color empty stars
+        stars.getDrawable(0).setColorFilter(ContextCompat.getColor(context, R.color.grey), PorterDuff.Mode.SRC_IN);
     }
 }
