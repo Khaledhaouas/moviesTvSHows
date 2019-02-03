@@ -77,7 +77,8 @@ public class MovieDetailsFragment extends Fragment {
     private TextView mTxtSimilar;
     private LinearLayout mLayoutReviews;
     private LinearLayout mLayoutSimilar;
-    private ImageView mImgEmpty;
+    private ImageView mImgEmptyReviews;
+    private ImageView mImgEmptySimilar;
 
     private FrameLayout mPlotIndicator;
     private FrameLayout mCastIndicator;
@@ -187,7 +188,8 @@ public class MovieDetailsFragment extends Fragment {
             mRVCreditList = getActivity().findViewById(R.id.rv_cast);
             mRVReviewList = getActivity().findViewById(R.id.rv_reviews);
             mRVSimilarMoviesList = getActivity().findViewById(R.id.rv_similar_movies);
-            mImgEmpty = getActivity().findViewById(R.id.img_empty);
+            mImgEmptyReviews = getActivity().findViewById(R.id.img_empty_review);
+            mImgEmptySimilar = getActivity().findViewById(R.id.img_empty_similar);
             Utils.initRatingBar(getActivity(), mRtMovieRating);
 
 
@@ -238,7 +240,7 @@ public class MovieDetailsFragment extends Fragment {
                         public void onSuccess(ArrayList<Review> reviews) {
                             switchSelectedSection(3);
                             if (reviews.isEmpty()) {
-                                mImgEmpty.setVisibility(View.VISIBLE);
+                                mImgEmptyReviews.setVisibility(View.VISIBLE);
                             } else {
                                 mRVReviewList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                                 mRVReviewList.setAdapter(new ReviewsRecyclerViewAdapter(getActivity(), reviews));
@@ -268,7 +270,7 @@ public class MovieDetailsFragment extends Fragment {
                             switchSelectedSection(4);
 
                             if (movies.isEmpty()) {
-                                mImgEmpty.setVisibility(View.VISIBLE);
+                                mImgEmptySimilar.setVisibility(View.VISIBLE);
                             } else {
                                 mRVSimilarMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                                 MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
