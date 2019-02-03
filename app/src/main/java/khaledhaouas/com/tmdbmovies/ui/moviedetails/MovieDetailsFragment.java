@@ -101,7 +101,7 @@ public class MovieDetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.movie_details_fragment, container, false);
         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         if (getArguments() != null) {
             mMovieId = getArguments().getInt("MovieId");

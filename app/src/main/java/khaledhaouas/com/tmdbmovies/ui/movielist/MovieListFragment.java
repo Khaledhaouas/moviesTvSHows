@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ public class MovieListFragment extends Fragment {
 
     //UI Elements
     private RecyclerView mRVMoviesList;
+    private TabLayout mTabsMovieListType;
 
     public static MovieListFragment newInstance() {
         return new MovieListFragment();
@@ -45,6 +47,11 @@ public class MovieListFragment extends Fragment {
 
         initUIElements();
         initUIEvents();
+
+        mTabsMovieListType = getActivity().findViewById(R.id.tabLayout) ;
+        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Tab 1"));
+        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Tab 2"));
+        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Tab 3"));
 
         mViewModel.getPopularMoviesList(new OnMoviesListLoadedCallback() {
             @Override
