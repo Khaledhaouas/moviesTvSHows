@@ -47,11 +47,7 @@ public class MovieListFragment extends Fragment {
 
         initUIElements();
         initUIEvents();
-
-        mTabsMovieListType = getActivity().findViewById(R.id.tabLayout) ;
-        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Tab 1"));
-        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Tab 2"));
-        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Tab 3"));
+        initTabLayout();
 
         mViewModel.getPopularMoviesList(new OnMoviesListLoadedCallback() {
             @Override
@@ -87,6 +83,7 @@ public class MovieListFragment extends Fragment {
         try {
 
             mRVMoviesList = getActivity().findViewById(R.id.rv_similar_movies);
+            mTabsMovieListType = getActivity().findViewById(R.id.tabLayout);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -94,7 +91,121 @@ public class MovieListFragment extends Fragment {
     }
 
     private void initUIEvents() {
+        mTabsMovieListType.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        mViewModel.getPopularMoviesList(new OnMoviesListLoadedCallback() {
+                            @Override
+                            public void onSuccess(final ArrayList<Movie> movies) {
 
+                                mRVMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
+                                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+                                        Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
+                                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                                        Bundle args = new Bundle();
+                                        args.putInt("MovieId", movies.get(position).getId());
+                                        movieDetailsFragment.setArguments(args);
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.container, movieDetailsFragment)
+                                                .commitNow();
+                                    }
+                                });
+                                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
+
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+                        break;
+                    case 1:
+                        mViewModel.getUpcomingMoviesList(new OnMoviesListLoadedCallback() {
+                            @Override
+                            public void onSuccess(final ArrayList<Movie> movies) {
+
+                                mRVMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
+                                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+                                        Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
+                                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                                        Bundle args = new Bundle();
+                                        args.putInt("MovieId", movies.get(position).getId());
+                                        movieDetailsFragment.setArguments(args);
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.container, movieDetailsFragment)
+                                                .commitNow();
+                                    }
+                                });
+                                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
+
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+                        break;
+                    case 2:
+                        mViewModel.getNowPlayingMoviesList(new OnMoviesListLoadedCallback() {
+                            @Override
+                            public void onSuccess(final ArrayList<Movie> movies) {
+
+                                mRVMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
+                                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+                                        Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
+                                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                                        Bundle args = new Bundle();
+                                        args.putInt("MovieId", movies.get(position).getId());
+                                        movieDetailsFragment.setArguments(args);
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.container, movieDetailsFragment)
+                                                .commitNow();
+                                    }
+                                });
+                                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
+
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    private void initTabLayout() {
+        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Popular"));
+        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Coming Soon"));
+        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Now Showing"));
     }
 
 }

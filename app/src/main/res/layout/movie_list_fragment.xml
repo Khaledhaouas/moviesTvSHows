@@ -26,6 +26,10 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabSelectedTextColor="#ff1744"
+            app:tabTextColor="#78ff1744"
+            android:paddingBottom="10dp"
+            app:tabIndicatorColor="@color/colorPrimary"
             android:background="@drawable/layout_bg_round_corners" />
     </FrameLayout>
 
