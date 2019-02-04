@@ -65,7 +65,8 @@ public class MovieListFragment extends Fragment {
                         movieDetailsFragment.setArguments(args);
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container, movieDetailsFragment)
-                                .commitNow();
+                                .addToBackStack(null)
+                                .commit();
                     }
                 });
                 mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
@@ -112,7 +113,8 @@ public class MovieListFragment extends Fragment {
                                         movieDetailsFragment.setArguments(args);
                                         getActivity().getSupportFragmentManager().beginTransaction()
                                                 .replace(R.id.container, movieDetailsFragment)
-                                                .commitNow();
+                                                .addToBackStack(null)
+                                                .commit();
                                     }
                                 });
                                 mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
@@ -142,7 +144,8 @@ public class MovieListFragment extends Fragment {
                                         movieDetailsFragment.setArguments(args);
                                         getActivity().getSupportFragmentManager().beginTransaction()
                                                 .replace(R.id.container, movieDetailsFragment)
-                                                .commitNow();
+                                                .addToBackStack(null)
+                                                .commit();
                                     }
                                 });
                                 mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
@@ -172,7 +175,8 @@ public class MovieListFragment extends Fragment {
                                         movieDetailsFragment.setArguments(args);
                                         getActivity().getSupportFragmentManager().beginTransaction()
                                                 .replace(R.id.container, movieDetailsFragment)
-                                                .commitNow();
+                                                .addToBackStack(null)
+                                                .commit();
                                     }
                                 });
                                 mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);

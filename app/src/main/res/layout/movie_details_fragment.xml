@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll_movie_details"
@@ -126,116 +127,19 @@
 
         </RelativeLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_synopsis"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:text="Plot"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <FrameLayout
-                    android:id="@+id/fr_plot_indicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/colorPrimary"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_cast"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:text="Cast"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
-
-                <FrameLayout
-                    android:id="@+id/fr_cast_indicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/colorPrimary"
-                    android:visibility="invisible" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_reviews"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:text="Reviews"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
-
-                <FrameLayout
-                    android:id="@+id/fr_reviews_indicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/colorPrimary"
-                    android:visibility="invisible" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_similar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:text="Similar"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
-
-                <FrameLayout
-                    android:id="@+id/fr_similar_indicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/colorPrimary"
-                    android:visibility="invisible" />
-            </LinearLayout>
-
-
-        </LinearLayout>
+            android:background="@android:color/white"
+            android:paddingBottom="10dp"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabSelectedTextColor="#ff1744"
+            app:tabTextColor="#96ff1744" />
 
         <LinearLayout
             android:id="@+id/layout_overview"

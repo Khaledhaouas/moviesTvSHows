@@ -1,12 +1,11 @@
 package khaledhaouas.com.tmdbmovies.ui.moviedetails;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -39,8 +37,8 @@ import khaledhaouas.com.tmdbmovies.models.entities.Review;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
@@ -69,26 +67,21 @@ public class MovieDetailsFragment extends Fragment {
     private TextView mTxtMovieLang;
     private TextView mTxtMoviePlot;
 
-    private TextView mTxtSynopsis;
+    private TabLayout mTabsMovieType;
+
     private LinearLayout mLayoutSynopsis;
-    private TextView mTxtCast;
     private LinearLayout mLayoutCast;
-    private TextView mTxtReviews;
-    private TextView mTxtSimilar;
     private LinearLayout mLayoutReviews;
     private LinearLayout mLayoutSimilar;
+
     private ImageView mImgEmptyReviews;
     private ImageView mImgEmptySimilar;
-
-    private FrameLayout mPlotIndicator;
-    private FrameLayout mCastIndicator;
-    private FrameLayout mReviewsIndicator;
-    private FrameLayout mSimilarIndicator;
 
     private RecyclerView mRVVideosList;
     private RecyclerView mRVCreditList;
     private RecyclerView mRVReviewList;
     private RecyclerView mRVSimilarMoviesList;
+
 
     public static MovieDetailsFragment newInstance() {
         return new MovieDetailsFragment();
@@ -118,6 +111,7 @@ public class MovieDetailsFragment extends Fragment {
 
         initUIElements();
         initUIEvents();
+        initTabLayout();
 
         mViewModel.getMovieDetails(mMovieId, new OnMovieLoadedCallback() {
             @Override
@@ -171,18 +165,10 @@ public class MovieDetailsFragment extends Fragment {
             mTxtMoviePlot = getActivity().findViewById(R.id.txt_movie_plot);
             mRtMovieRating = getActivity().findViewById(R.id.txt_movie_rating);
 
-            mTxtSynopsis = getActivity().findViewById(R.id.txt_synopsis);
-            mTxtCast = getActivity().findViewById(R.id.txt_cast);
-            mTxtReviews = getActivity().findViewById(R.id.txt_reviews);
-            mTxtSimilar = getActivity().findViewById(R.id.txt_similar);
             mLayoutSynopsis = getActivity().findViewById(R.id.layout_overview);
             mLayoutCast = getActivity().findViewById(R.id.layout_cast);
             mLayoutSimilar = getActivity().findViewById(R.id.layout_similar);
             mLayoutReviews = getActivity().findViewById(R.id.layout_reviews);
-            mPlotIndicator = getActivity().findViewById(R.id.fr_plot_indicator);
-            mCastIndicator = getActivity().findViewById(R.id.fr_cast_indicator);
-            mReviewsIndicator = getActivity().findViewById(R.id.fr_reviews_indicator);
-            mSimilarIndicator = getActivity().findViewById(R.id.fr_similar_indicator);
 
             mRVVideosList = getActivity().findViewById(R.id.rv_videos);
             mRVCreditList = getActivity().findViewById(R.id.rv_cast);
@@ -192,6 +178,8 @@ public class MovieDetailsFragment extends Fragment {
             mImgEmptySimilar = getActivity().findViewById(R.id.img_empty_similar);
             Utils.initRatingBar(getActivity(), mRtMovieRating);
 
+            mTabsMovieType = getActivity().findViewById(R.id.tabLayout);
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -199,111 +187,117 @@ public class MovieDetailsFragment extends Fragment {
     }
 
     private void initUIEvents() {
-        mTxtSynopsis.setOnClickListener(new View.OnClickListener() {
+
+        mTabsMovieType.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
-            public void onClick(View v) {
-                switchSelectedSection(1);
-            }
-        });
-        mTxtCast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mViewModel.getCredits().isEmpty()) {
-                    mViewModel.getMovieCreditList(mMovieId, new OnCreditListLoadedCallback() {
-                        @Override
-                        public void onSuccess(ArrayList<Credit> credits) {
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        switchSelectedSection(1);
+                        break;
+                    case 1:
+                        if (mViewModel.getCredits().isEmpty()) {
+                            mViewModel.getMovieCreditList(mMovieId, new OnCreditListLoadedCallback() {
+                                @Override
+                                public void onSuccess(ArrayList<Credit> credits) {
+                                    switchSelectedSection(2);
+                                    GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
+                                    mRVCreditList.setLayoutManager(m);
+                                    mRVCreditList.setAdapter(new CreditsRecyclerViewAdapter(getActivity(), credits));
+                                    mScrollViewMainContent.fullScroll(View.FOCUS_UP);
+                                }
+
+                                @Override
+                                public void onError() {
+
+                                }
+                            });
+                        } else {
                             switchSelectedSection(2);
-                            GridLayoutManager m = new GridLayoutManager(getActivity(), Utils.calculateNoOfColumns(getActivity()) + 1);
-                            mRVCreditList.setLayoutManager(m);
-                            mRVCreditList.setAdapter(new CreditsRecyclerViewAdapter(getActivity(), credits));
-                            mScrollViewMainContent.fullScroll(View.FOCUS_UP);
                         }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-                } else {
-                    switchSelectedSection(2);
-                }
-
-            }
-        });
-
-        mTxtReviews.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mViewModel.getmReviews().isEmpty()) {
-                    mViewModel.getMovieReviewList(mMovieId, new OnReviewListLoadedCallback() {
-                        @Override
-                        public void onSuccess(ArrayList<Review> reviews) {
-                            switchSelectedSection(3);
-                            if (reviews.isEmpty()) {
-                                mImgEmptyReviews.setVisibility(View.VISIBLE);
-                            } else {
-                                mRVReviewList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                mRVReviewList.setAdapter(new ReviewsRecyclerViewAdapter(getActivity(), reviews));
-                            }
-                            mScrollViewMainContent.fullScroll(View.FOCUS_UP);
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-                } else {
-                    switchSelectedSection(3);
-                }
-            }
-        });
-
-        mTxtSimilar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (mViewModel.getmSimilarMovies().isEmpty()) {
-                    mViewModel.getSimilarMoviesList(mMovieId, new OnMoviesListLoadedCallback() {
-                        @Override
-                        public void onSuccess(final ArrayList<Movie> movies) {
-                            switchSelectedSection(4);
-
-                            if (movies.isEmpty()) {
-                                mImgEmptySimilar.setVisibility(View.VISIBLE);
-                            } else {
-                                mRVSimilarMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
-                                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View view, int position) {
-                                        Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
-                                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
-                                        Bundle args = new Bundle();
-                                        args.putInt("MovieId", movies.get(position).getId());
-                                        movieDetailsFragment.setArguments(args);
-                                        getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.container, movieDetailsFragment)
-                                                .commitNow();
+                        break;
+                    case 2:
+                        if (mViewModel.getmReviews().isEmpty()) {
+                            mViewModel.getMovieReviewList(mMovieId, new OnReviewListLoadedCallback() {
+                                @Override
+                                public void onSuccess(ArrayList<Review> reviews) {
+                                    switchSelectedSection(3);
+                                    if (reviews.isEmpty()) {
+                                        mImgEmptyReviews.setVisibility(View.VISIBLE);
+                                    } else {
+                                        mRVReviewList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                        mRVReviewList.setAdapter(new ReviewsRecyclerViewAdapter(getActivity(), reviews));
                                     }
-                                });
-                                mRVSimilarMoviesList.setAdapter(moviesRecyclerViewAdapter);
-                            }
-                            mScrollViewMainContent.fullScroll(View.FOCUS_UP);
+                                    mScrollViewMainContent.fullScroll(View.FOCUS_UP);
+                                }
 
+                                @Override
+                                public void onError() {
 
+                                }
+                            });
+                        } else {
+                            switchSelectedSection(3);
                         }
+                        break;
+                    case 3:
+                        if (mViewModel.getmSimilarMovies().isEmpty()) {
+                            mViewModel.getSimilarMoviesList(mMovieId, new OnMoviesListLoadedCallback() {
+                                @Override
+                                public void onSuccess(final ArrayList<Movie> movies) {
+                                    switchSelectedSection(4);
 
-                        @Override
-                        public void onError() {
+                                    if (movies.isEmpty()) {
+                                        mImgEmptySimilar.setVisibility(View.VISIBLE);
+                                    } else {
+                                        mRVSimilarMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                        MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
+                                        moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                                            @Override
+                                            public void onItemClick(View view, int position) {
+                                                Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
+                                                MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                                                Bundle args = new Bundle();
+                                                args.putInt("MovieId", movies.get(position).getId());
+                                                movieDetailsFragment.setArguments(args);
+                                                getActivity().getSupportFragmentManager().beginTransaction()
+                                                        .replace(R.id.container, movieDetailsFragment)
+                                                        .addToBackStack(null)
+                                                        .commit();
+                                            }
+                                        });
+                                        mRVSimilarMoviesList.setAdapter(moviesRecyclerViewAdapter);
+                                    }
+                                    mScrollViewMainContent.fullScroll(View.FOCUS_UP);
 
+
+                                }
+
+                                @Override
+                                public void onError() {
+
+                                }
+                            });
+                        } else {
+                            switchSelectedSection(4);
                         }
-                    });
-                } else {
-                    switchSelectedSection(4);
+                        break;
+                    default:
+                        break;
                 }
             }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
         });
+
     }
 
     private void loadRoundedImageFromURL(ImageView imgView, String url) {
@@ -330,16 +324,6 @@ public class MovieDetailsFragment extends Fragment {
                 mLayoutSimilar.setVisibility(GONE);
                 mLayoutCast.setVisibility(View.GONE);
 
-                mPlotIndicator.setVisibility(View.VISIBLE);
-                mCastIndicator.setVisibility(GONE);
-                mReviewsIndicator.setVisibility(GONE);
-                mSimilarIndicator.setVisibility(GONE);
-
-                mTxtSynopsis.setTypeface(mTxtSynopsis.getTypeface(), Typeface.BOLD);
-                mTxtCast.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
-                mTxtReviews.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
-                mTxtSimilar.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
-
                 break;
             case 2:
                 mLayoutSynopsis.setVisibility(GONE);
@@ -347,15 +331,6 @@ public class MovieDetailsFragment extends Fragment {
                 mLayoutSimilar.setVisibility(GONE);
                 mLayoutCast.setVisibility(View.VISIBLE);
 
-                mPlotIndicator.setVisibility(GONE);
-                mCastIndicator.setVisibility(View.VISIBLE);
-                mReviewsIndicator.setVisibility(GONE);
-                mSimilarIndicator.setVisibility(GONE);
-
-                mTxtSynopsis.setTypeface(Typeface.create(mTxtSynopsis.getTypeface(), Typeface.NORMAL));
-                mTxtCast.setTypeface(mTxtCast.getTypeface(), Typeface.BOLD);
-                mTxtReviews.setTypeface(Typeface.create(mTxtReviews.getTypeface(), Typeface.NORMAL));
-                mTxtSimilar.setTypeface(Typeface.create(mTxtSimilar.getTypeface(), Typeface.NORMAL));
                 break;
             case 3:
                 mLayoutSynopsis.setVisibility(GONE);
@@ -363,35 +338,24 @@ public class MovieDetailsFragment extends Fragment {
                 mLayoutSimilar.setVisibility(GONE);
                 mLayoutCast.setVisibility(View.GONE);
 
-                mPlotIndicator.setVisibility(GONE);
-                mCastIndicator.setVisibility(GONE);
-                mReviewsIndicator.setVisibility(View.VISIBLE);
-                mSimilarIndicator.setVisibility(GONE);
-
-                mTxtSynopsis.setTypeface(Typeface.create(mTxtSynopsis.getTypeface(), Typeface.NORMAL));
-                mTxtCast.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
-                mTxtReviews.setTypeface(mTxtReviews.getTypeface(), Typeface.BOLD);
-                mTxtSimilar.setTypeface(Typeface.create(mTxtSimilar.getTypeface(), Typeface.NORMAL));
                 break;
             case 4:
                 mLayoutSynopsis.setVisibility(GONE);
                 mLayoutReviews.setVisibility(GONE);
                 mLayoutSimilar.setVisibility(View.VISIBLE);
                 mLayoutCast.setVisibility(View.GONE);
-
-                mPlotIndicator.setVisibility(GONE);
-                mCastIndicator.setVisibility(GONE);
-                mReviewsIndicator.setVisibility(GONE);
-                mSimilarIndicator.setVisibility(View.VISIBLE);
-
-                mTxtSynopsis.setTypeface(Typeface.create(mTxtSynopsis.getTypeface(), Typeface.NORMAL));
-                mTxtCast.setTypeface(Typeface.create(mTxtCast.getTypeface(), Typeface.NORMAL));
-                mTxtReviews.setTypeface(Typeface.create(mTxtReviews.getTypeface(), Typeface.NORMAL));
-                mTxtSimilar.setTypeface(mTxtSimilar.getTypeface(), Typeface.BOLD);
+                
                 break;
             default:
                 break;
         }
+    }
+
+    private void initTabLayout() {
+        mTabsMovieType.addTab(mTabsMovieType.newTab().setText("Plot"));
+        mTabsMovieType.addTab(mTabsMovieType.newTab().setText("Cast"));
+        mTabsMovieType.addTab(mTabsMovieType.newTab().setText("Reviews"));
+        mTabsMovieType.addTab(mTabsMovieType.newTab().setText("Similar"));
     }
 
 

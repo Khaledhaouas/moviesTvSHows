@@ -1,6 +1,7 @@
 package khaledhaouas.com.tmdbmovies.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import khaledhaouas.com.tmdbmovies.R;
@@ -17,7 +18,17 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, MovieListFragment.newInstance())
-                    .commitNow();
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    @Override public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (!(fragment instanceof MovieListFragment)) {
+            super.onBackPressed();
+        }else {
+            System.exit(0);
         }
     }
 }
