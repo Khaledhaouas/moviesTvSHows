@@ -23,11 +23,11 @@ public class ApiManager {
 
     private static ApiManager sInstance = null;
 
-    public static ApiManager getsInstance() {
-        return sInstance == null ? new ApiManager() : sInstance;
+    private ApiManager() {
     }
 
-    private ApiManager() {
+    public static ApiManager getsInstance() {
+        return sInstance == null ? new ApiManager() : sInstance;
     }
 
     public void GET(final String url, final ApiServerCallback callback) {

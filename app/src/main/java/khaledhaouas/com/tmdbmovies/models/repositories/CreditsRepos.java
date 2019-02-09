@@ -12,7 +12,6 @@ import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiManager;
 import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiServerCallback;
 import khaledhaouas.com.tmdbmovies.managers.ConfigManager;
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
-import khaledhaouas.com.tmdbmovies.models.entities.Movie;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
 
 public class CreditsRepos {

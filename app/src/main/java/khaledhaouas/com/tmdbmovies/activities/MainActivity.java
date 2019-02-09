@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import khaledhaouas.com.tmdbmovies.R;
-import khaledhaouas.com.tmdbmovies.ui.moviedetails.MovieDetailsFragment;
 import khaledhaouas.com.tmdbmovies.ui.movielist.MovieListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,11 +22,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
         if (!(fragment instanceof MovieListFragment)) {
             super.onBackPressed();
-        }else {
+        } else {
             System.exit(0);
         }
     }

@@ -16,7 +16,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.player.listeners.YouTubeP
 import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.R;
-import khaledhaouas.com.tmdbmovies.models.entities.Review;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
 
 public class VideosRecyclerViewAdapter extends RecyclerView.Adapter<VideosRecyclerViewAdapter.ViewHolder> {

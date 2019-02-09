@@ -344,7 +344,7 @@ public class MovieDetailsFragment extends Fragment {
                 mLayoutReviews.setVisibility(GONE);
                 mLayoutSimilar.setVisibility(View.VISIBLE);
                 mLayoutCast.setVisibility(View.GONE);
-                
+
                 break;
             default:
                 break;

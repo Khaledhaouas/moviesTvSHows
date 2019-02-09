@@ -1,7 +1,6 @@
 package khaledhaouas.com.tmdbmovies.ui.movielist;
 
 import android.arch.lifecycle.ViewModel;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -110,7 +109,7 @@ public class MovieListViewModel extends ViewModel {
         });
     }
 
-    public void getSearchResultMoviesList(String searchText,final OnMoviesListLoadedCallback callback) {
+    public void getSearchResultMoviesList(String searchText, final OnMoviesListLoadedCallback callback) {
         mMovieRepos.getSearchResultMoviesList(searchText, new OnMoviesListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Movie> movies) {

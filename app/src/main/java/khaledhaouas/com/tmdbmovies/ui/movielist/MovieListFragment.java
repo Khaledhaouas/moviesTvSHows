@@ -41,6 +41,7 @@ public class MovieListFragment extends Fragment {
     private LinearLayout mLayoutSearch;
     private ViewGroup mLayoutSearchParent;
     private ImageView mImgSearch;
+    private boolean isUp = false;
 
     public static MovieListFragment newInstance() {
         return new MovieListFragment();
@@ -300,9 +301,6 @@ public class MovieListFragment extends Fragment {
         mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Coming Soon"));
         mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Now Showing"));
     }
-
-
-    private boolean isUp = false;
 
     public void slideUp(final View view) {
 //        view.setVisibility(View.VISIBLE);

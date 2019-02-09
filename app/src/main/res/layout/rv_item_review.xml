@@ -45,8 +45,8 @@
                 android:id="@+id/txt_review_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:layout_margin="5dp"
+                android:ellipsize="end"
                 android:maxLines="6"
                 android:textColor="#757575"
                 android:textSize="13sp" />

@@ -12,24 +12,21 @@ import com.android.volley.toolbox.Volley;
  */
 
 public class VolleyManager extends Application {
-    private static final int DEFAULT_NETWORK_THREAD_POOL_SIZE = 4;
-
     public static final String TAG = VolleyManager.class
             .getSimpleName();
-
+    private static final int DEFAULT_NETWORK_THREAD_POOL_SIZE = 4;
+    private static VolleyManager mInstance;
     private RequestQueue mRequestQueue;
 
-    private static VolleyManager mInstance;
+    public static synchronized VolleyManager getInstance() {
+
+        return mInstance;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-    }
-
-    public static synchronized VolleyManager getInstance() {
-
-        return mInstance;
     }
 
     public RequestQueue getRequestQueue() {
