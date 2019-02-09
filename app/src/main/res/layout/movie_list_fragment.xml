@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context=".ui.movielist.MovieListFragment">
 
@@ -15,7 +16,24 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:title="Tab Sample"
-        app:titleTextColor="@android:color/white" />
+        app:titleTextColor="@android:color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btn_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/search_icon" />
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -26,11 +44,35 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabSelectedTextColor="#ff1744"
-            app:tabTextColor="#78ff1744"
+            android:background="@drawable/layout_bg_round_corners"
             android:paddingBottom="10dp"
+            android:visibility="visible"
             app:tabIndicatorColor="@color/colorPrimary"
-            android:background="@drawable/layout_bg_round_corners" />
+            app:tabSelectedTextColor="#ff1744"
+            app:tabTextColor="#78ff1744" />
+
+        <LinearLayout
+            android:id="@+id/layout_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_bg_round_corners"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/edt_search_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="Search"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1" />
+        </LinearLayout>
+
+
     </FrameLayout>
 
 

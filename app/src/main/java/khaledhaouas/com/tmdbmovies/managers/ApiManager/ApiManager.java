@@ -204,4 +204,9 @@ public class ApiManager {
         }
 
     }
+
+    public void CANCELALLPENDINGREQUESTS() {
+        VolleyManager.getInstance().cancelPendingRequests(VolleyManager.class
+                .getSimpleName());
+    }
 }

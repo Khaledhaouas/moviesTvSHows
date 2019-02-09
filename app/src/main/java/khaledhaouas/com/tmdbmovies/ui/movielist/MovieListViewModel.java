@@ -1,6 +1,7 @@
 package khaledhaouas.com.tmdbmovies.ui.movielist;
 
 import android.arch.lifecycle.ViewModel;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,7 @@ import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.repositories.MoviesRepos;
 
 public class MovieListViewModel extends ViewModel {
+    private static final String TAG = "MovieListViewModel";
     private MoviesRepos mMovieRepos;
 
     private ArrayList<Movie> mPopularMovies;
@@ -96,6 +98,23 @@ public class MovieListViewModel extends ViewModel {
         mMovieRepos.getMoviesList("top_rated", new OnMoviesListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Movie> movies) {
+                mTopRatedMovies.clear();
+                mTopRatedMovies.addAll(movies);
+                callback.onSuccess(movies);
+            }
+
+            @Override
+            public void onError() {
+                callback.onError();
+            }
+        });
+    }
+
+    public void getSearchResultMoviesList(String searchText,final OnMoviesListLoadedCallback callback) {
+        mMovieRepos.getSearchResultMoviesList(searchText, new OnMoviesListLoadedCallback() {
+            @Override
+            public void onSuccess(ArrayList<Movie> movies) {
+//                Log.e(TAG, movies.toString());
                 mTopRatedMovies.clear();
                 mTopRatedMovies.addAll(movies);
                 callback.onSuccess(movies);

@@ -119,6 +119,28 @@ public class MoviesRepos {
         });
     }
 
+    public void getSearchResultMoviesList(String searchText, final OnMoviesListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "search/movie" + ConfigManager.getInstance().addApiKeyToRequest() + "&query=" + searchText;
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().CANCELALLPENDINGREQUESTS();
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Movie> movies = parseJsonToMoviesList(result);
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(movies);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
     private ArrayList<Movie> parseJsonToMoviesList(JSONObject jsonMovies) {
         ArrayList<Movie> movies = new ArrayList<>();
         try {
