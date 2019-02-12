@@ -43,6 +43,8 @@ public class MovieListFragment extends Fragment {
     private ImageView mImgSearch;
     private ImageView mImgHideSearch;
     private boolean isUp = false;
+    private LinearLayoutManager layoutManager;
+    private MoviesRecyclerViewAdapter moviesRecyclerViewAdapter;
 
     public static MovieListFragment newInstance() {
         return new MovieListFragment();
@@ -63,36 +65,6 @@ public class MovieListFragment extends Fragment {
         initUIEvents();
         initTabLayout();
 
-        mViewModel.getPopularMoviesList(new OnMoviesListLoadedCallback() {
-            @Override
-            public void onSuccess(final ArrayList<Movie> movies) {
-
-                mRVMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                mRVMoviesList.setItemAnimator(new DefaultItemAnimator());
-                MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
-                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
-                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
-                        Bundle args = new Bundle();
-                        args.putInt("MovieId", movies.get(position).getId());
-                        movieDetailsFragment.setArguments(args);
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, movieDetailsFragment)
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                });
-                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
-
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
     }
 
     private void initUIElements() {
@@ -105,6 +77,11 @@ public class MovieListFragment extends Fragment {
             mImgSearch = getActivity().findViewById(R.id.btn_search);
             mLayoutSearchParent = (ViewGroup) mLayoutSearch.getParent();
             mImgHideSearch = getActivity().findViewById(R.id.img_hide_search);
+
+            //Recycler View Setup
+            layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+            mRVMoviesList.setLayoutManager(layoutManager);
+            mRVMoviesList.setItemAnimator(new DefaultItemAnimator());
 
             slideDown(mLayoutSearch);
             isUp = false;
@@ -133,6 +110,8 @@ public class MovieListFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                switchTabs(mTabsMovieListType.getSelectedTabPosition());
+
                 slideDown(mLayoutSearch);
                 isUp = false;
             }
@@ -141,106 +120,7 @@ public class MovieListFragment extends Fragment {
         mTabsMovieListType.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        mViewModel.getPopularMoviesList(new OnMoviesListLoadedCallback() {
-                            @Override
-                            public void onSuccess(final ArrayList<Movie> movies) {
-
-                                mRVMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                mRVMoviesList.setItemAnimator(new DefaultItemAnimator());
-                                MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
-                                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View view, int position) {
-                                        Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
-                                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
-                                        Bundle args = new Bundle();
-                                        args.putInt("MovieId", movies.get(position).getId());
-                                        movieDetailsFragment.setArguments(args);
-                                        getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.container, movieDetailsFragment)
-                                                .addToBackStack(null)
-                                                .commit();
-                                    }
-                                });
-                                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
-
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
-                        break;
-                    case 1:
-                        mViewModel.getUpcomingMoviesList(new OnMoviesListLoadedCallback() {
-                            @Override
-                            public void onSuccess(final ArrayList<Movie> movies) {
-
-                                mRVMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                mRVMoviesList.setItemAnimator(new DefaultItemAnimator());
-                                MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
-                                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View view, int position) {
-                                        Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
-                                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
-                                        Bundle args = new Bundle();
-                                        args.putInt("MovieId", movies.get(position).getId());
-                                        movieDetailsFragment.setArguments(args);
-                                        getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.container, movieDetailsFragment)
-                                                .addToBackStack(null)
-                                                .commit();
-                                    }
-                                });
-                                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
-
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
-                        break;
-                    case 2:
-                        mViewModel.getNowPlayingMoviesList(new OnMoviesListLoadedCallback() {
-                            @Override
-                            public void onSuccess(final ArrayList<Movie> movies) {
-
-                                mRVMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                mRVMoviesList.setItemAnimator(new DefaultItemAnimator());
-                                MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
-                                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View view, int position) {
-                                        Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
-                                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
-                                        Bundle args = new Bundle();
-                                        args.putInt("MovieId", movies.get(position).getId());
-                                        movieDetailsFragment.setArguments(args);
-                                        getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.container, movieDetailsFragment)
-                                                .addToBackStack(null)
-                                                .commit();
-                                    }
-                                });
-                                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
-
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
-                        break;
-                    default:
-                        break;
-                }
+                switchTabs(tab.getPosition());
             }
 
             @Override
@@ -263,13 +143,15 @@ public class MovieListFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
+                    final CharSequence finalS = s;
                     mViewModel.getSearchResultMoviesList(s.toString(), new OnMoviesListLoadedCallback() {
                         @Override
-                        public void onSuccess(final ArrayList<Movie> movies) {
+                        public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
 //                            Log.e("Search", movies.toString() );
-                            mRVMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                            final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                            mRVMoviesList.setLayoutManager(layoutManager);
                             mRVMoviesList.setItemAnimator(new DefaultItemAnimator());
-                            MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
+                            final MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getSearchedMovies());
                             moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
@@ -285,6 +167,39 @@ public class MovieListFragment extends Fragment {
                                 }
                             });
                             mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
+                            mRVMoviesList.clearOnScrollListeners();
+                            mRVMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                @Override
+                                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                    super.onScrollStateChanged(recyclerView, newState);
+                                }
+
+                                @Override
+                                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                    super.onScrolled(recyclerView, dx, dy);
+                                    int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
+                                    int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                                    int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                                    if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentSearchedMoviesPage() != mViewModel.getTotalSearchedMoviesPage()) {
+                                        if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                                                && firstVisibleItemPosition >= 0
+                                                && totalItemCount >= 20 * mViewModel.getCurrentUpcomingMoviesPage()) {
+
+                                            mViewModel.getNextPageSearchedMoviesList(finalS.toString(), new OnMoviesListLoadedCallback() {
+                                                @Override
+                                                public void onSuccess(ArrayList<Movie> movies, int totalPages) {
+                                                    moviesRecyclerViewAdapter.notifyDataSetChanged();
+                                                }
+
+                                                @Override
+                                                public void onError() {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
                         }
 
                         @Override
@@ -306,6 +221,215 @@ public class MovieListFragment extends Fragment {
         mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Popular"));
         mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Coming Soon"));
         mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Now Showing"));
+    }
+
+    private void switchTabs(int tabPos) {
+        switch (tabPos) {
+            case 0:
+                moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getPopularMovies());
+                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                        Bundle args = new Bundle();
+                        args.putInt("MovieId", mViewModel.getPopularMovies().get(position).getId());
+                        movieDetailsFragment.setArguments(args);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, movieDetailsFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
+                mRVMoviesList.clearOnScrollListeners();
+                mRVMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
+
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
+                        int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                        int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                        Log.e(TAG, "isLoading " + mViewModel.isNextPageLoading() + "    "
+                                + mViewModel.getCurrentPopularMoviesPage()
+                                + "    " + mViewModel.getTotalPopularMoviesPage());
+                        if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentPopularMoviesPage() != mViewModel.getTotalPopularMoviesPage()) {
+                            Log.e(TAG, "isLoading 2 : " + (visibleItemCount + firstVisibleItemPosition) + "    "
+                                    + totalItemCount
+                                    + "    " + firstVisibleItemPosition
+                                    + "    " + (20 * mViewModel.getCurrentPopularMoviesPage()));
+                            if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                                    && firstVisibleItemPosition >= 0
+                                    && totalItemCount >= 20 * mViewModel.getCurrentPopularMoviesPage()) {
+
+                                mViewModel.getNextPagePopularMoviesList(new OnMoviesListLoadedCallback() {
+                                    @Override
+                                    public void onSuccess(ArrayList<Movie> movies, int totalPages) {
+                                        moviesRecyclerViewAdapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onError() {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+
+                if (mViewModel.getPopularMovies().isEmpty()) {
+                    mViewModel.getPopularMoviesList(new OnMoviesListLoadedCallback() {
+                        @Override
+                        public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
+                            moviesRecyclerViewAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+                }
+
+                break;
+            case 1:
+                moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getUpcomingMovies());
+                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                        Bundle args = new Bundle();
+                        args.putInt("MovieId", mViewModel.getUpcomingMovies().get(position).getId());
+                        movieDetailsFragment.setArguments(args);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, movieDetailsFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
+                mRVMoviesList.clearOnScrollListeners();
+                mRVMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
+
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
+                        int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                        int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                        if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentUpcomingMoviesPage() != mViewModel.getTotalUpcomingMoviesPage()) {
+                            if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                                    && firstVisibleItemPosition >= 0
+                                    && totalItemCount >= 20 * mViewModel.getCurrentUpcomingMoviesPage()) {
+
+                                mViewModel.getNextPageUpcomingMoviesList(new OnMoviesListLoadedCallback() {
+                                    @Override
+                                    public void onSuccess(ArrayList<Movie> movies, int totalPages) {
+                                        moviesRecyclerViewAdapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onError() {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+
+                if (mViewModel.getUpcomingMovies().isEmpty()) {
+                    mViewModel.getUpcomingMoviesList(new OnMoviesListLoadedCallback() {
+                        @Override
+                        public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
+                            moviesRecyclerViewAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+                }
+
+                break;
+            case 2:
+                moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getNowPlayingMovies());
+                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Log.e(TAG, "onItemClick: " + mViewModel.getNowPlayingMovies().get(position).getTitle());
+                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                        Bundle args = new Bundle();
+                        args.putInt("MovieId", mViewModel.getNowPlayingMovies().get(position).getId());
+                        movieDetailsFragment.setArguments(args);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, movieDetailsFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
+                mRVMoviesList.clearOnScrollListeners();
+                mRVMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
+
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
+                        int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                        int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                        if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentNowPlayingMoviesPage() != mViewModel.getTotalNowPlayingMoviesPage()) {
+                            if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                                    && firstVisibleItemPosition >= 0
+                                    && totalItemCount >= 20 * mViewModel.getCurrentNowPlayingMoviesPage()) {
+
+                                mViewModel.getNextPageNowPlayingMoviesList(new OnMoviesListLoadedCallback() {
+                                    @Override
+                                    public void onSuccess(ArrayList<Movie> movies, int totalPages) {
+                                        moviesRecyclerViewAdapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onError() {
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+                if (mViewModel.getNowPlayingMovies().isEmpty()) {
+                    mViewModel.getNowPlayingMoviesList(new OnMoviesListLoadedCallback() {
+                        @Override
+                        public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
+                            moviesRecyclerViewAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+                }
+
+                break;
+            default:
+                break;
+        }
     }
 
     public void slideUp(final View view) {

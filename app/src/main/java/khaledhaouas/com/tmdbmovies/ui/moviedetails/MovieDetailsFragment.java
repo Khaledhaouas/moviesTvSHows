@@ -49,8 +49,6 @@ import static android.view.View.GONE;
 public class MovieDetailsFragment extends Fragment {
     private static final String TAG = "MovieDetailsFragment";
 
-    private int mMovieId = 450465;
-
     private MovieDetailsViewModel mViewModel;
 
     //UI elements
@@ -97,9 +95,7 @@ public class MovieDetailsFragment extends Fragment {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
-        if (getArguments() != null) {
-            mMovieId = getArguments().getInt("MovieId");
-        }
+
         return v;
     }
 
@@ -108,12 +104,15 @@ public class MovieDetailsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
         // TODO: Use the ViewModel
+        if (getArguments() != null) {
+            mViewModel.setMovieId(getArguments().getInt("MovieId"));
+        }
 
         initUIElements();
         initUIEvents();
         initTabLayout();
 
-        mViewModel.getMovieDetails(mMovieId, new OnMovieLoadedCallback() {
+        mViewModel.getMovieDetails(new OnMovieLoadedCallback() {
             @Override
             public void onSuccess(Movie movie) {
 
@@ -135,7 +134,7 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
 
-        mViewModel.getMovieVideosList(mMovieId, new OnVideoListLoadedCallback() {
+        mViewModel.getMovieVideosList(new OnVideoListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Video> videos) {
                 mRVVideosList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -197,7 +196,7 @@ public class MovieDetailsFragment extends Fragment {
                         break;
                     case 1:
                         if (mViewModel.getCredits().isEmpty()) {
-                            mViewModel.getMovieCreditList(mMovieId, new OnCreditListLoadedCallback() {
+                            mViewModel.getMovieCreditList(new OnCreditListLoadedCallback() {
                                 @Override
                                 public void onSuccess(ArrayList<Credit> credits) {
                                     switchSelectedSection(2);
@@ -218,7 +217,7 @@ public class MovieDetailsFragment extends Fragment {
                         break;
                     case 2:
                         if (mViewModel.getmReviews().isEmpty()) {
-                            mViewModel.getMovieReviewList(mMovieId, new OnReviewListLoadedCallback() {
+                            mViewModel.getMovieReviewList(new OnReviewListLoadedCallback() {
                                 @Override
                                 public void onSuccess(ArrayList<Review> reviews) {
                                     switchSelectedSection(3);
@@ -242,16 +241,17 @@ public class MovieDetailsFragment extends Fragment {
                         break;
                     case 3:
                         if (mViewModel.getmSimilarMovies().isEmpty()) {
-                            mViewModel.getSimilarMoviesList(mMovieId, new OnMoviesListLoadedCallback() {
+                            mViewModel.getSimilarMoviesList(new OnMoviesListLoadedCallback() {
                                 @Override
-                                public void onSuccess(final ArrayList<Movie> movies) {
+                                public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
                                     switchSelectedSection(4);
 
                                     if (movies.isEmpty()) {
                                         mImgEmptySimilar.setVisibility(View.VISIBLE);
                                     } else {
-                                        mRVSimilarMoviesList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                        MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), movies);
+                                        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                                        mRVSimilarMoviesList.setLayoutManager(layoutManager);
+                                        final MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getmSimilarMovies());
                                         moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
                                             @Override
                                             public void onItemClick(View view, int position) {
@@ -267,6 +267,40 @@ public class MovieDetailsFragment extends Fragment {
                                             }
                                         });
                                         mRVSimilarMoviesList.setAdapter(moviesRecyclerViewAdapter);
+//                                        mRVSimilarMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                                            @Override
+//                                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                                                super.onScrollStateChanged(recyclerView, newState);
+//                                            }
+//
+//                                            @Override
+//                                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                                                super.onScrolled(recyclerView, dx, dy);
+//                                                int visibleItemCount = layoutManager.getChildCount();
+//                                                int totalItemCount = layoutManager.getItemCount();
+//                                                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+//
+//                                                if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentSimilarMoviesPage() != mViewModel.getTotalSimilarMoviesPage()) {
+//                                                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+//                                                            && firstVisibleItemPosition >= 0
+//                                                            && totalItemCount >= 20 * mViewModel.getCurrentSimilarMoviesPage()) {
+//
+//                                                        mViewModel.getNextPageSimilarMoviesList(mViewModel.getMovieId(), new OnMoviesListLoadedCallback() {
+//                                                            @Override
+//                                                            public void onSuccess(ArrayList<Movie> movies, int totalPages) {
+//                                                                moviesRecyclerViewAdapter.notifyDataSetChanged();
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onError() {
+//
+//                                                            }
+//                                                        });
+//                                                    }
+//                                                }
+//                                            }
+//                                        });
+
                                     }
                                     mScrollViewMainContent.fullScroll(View.FOCUS_UP);
 

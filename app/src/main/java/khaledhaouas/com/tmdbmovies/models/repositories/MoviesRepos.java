@@ -84,8 +84,44 @@ public class MoviesRepos {
             @Override
             public boolean onSuccess(JSONObject result) {
                 ArrayList<Movie> movies = parseJsonToMoviesList(result);
+
 //                Log.e(TAG, movie.toString());
-                callback.onSuccess(movies);
+                int totalPages = 0;
+                try {
+                    totalPages = result.getInt("total_pages");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(movies, totalPages);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
+    public void getSimilarMoviesList(int id, int page, final OnMoviesListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "movie/" + id + "/similar" + ConfigManager.getInstance().addApiKeyToRequest() + "&page=" + page;
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Movie> movies = parseJsonToMoviesList(result);
+//                Log.e(TAG, movie.toString());
+                int totalPages = 0;
+                try {
+                    totalPages = result.getInt("total_pages");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(movies, totalPages);
                 return false;
             }
 
@@ -106,7 +142,42 @@ public class MoviesRepos {
             public boolean onSuccess(JSONObject result) {
                 ArrayList<Movie> movies = parseJsonToMoviesList(result);
 //                Log.e(TAG, movie.toString());
-                callback.onSuccess(movies);
+                int totalPages = 0;
+                try {
+                    totalPages = result.getInt("total_pages");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(movies, totalPages);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
+    public void getMoviesList(String movieListType, int page, final OnMoviesListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "movie/" + movieListType + ConfigManager.getInstance().addApiKeyToRequest() + "&page=" + page;
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Movie> movies = parseJsonToMoviesList(result);
+//                Log.e(TAG, movie.toString());
+                int totalPages = 0;
+                try {
+                    totalPages = result.getInt("total_pages");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(movies, totalPages);
                 return false;
             }
 
@@ -126,9 +197,45 @@ public class MoviesRepos {
         ApiManager.getsInstance().GET(url, new ApiServerCallback() {
             @Override
             public boolean onSuccess(JSONObject result) {
+
                 ArrayList<Movie> movies = parseJsonToMoviesList(result);
+                int totalPages = 0;
+                try {
+                    totalPages = result.getInt("total_pages");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 //                Log.e(TAG, movie.toString());
-                callback.onSuccess(movies);
+                callback.onSuccess(movies, totalPages);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
+    public void getNextPageSearchResultMoviesList(String searchText, int page, final OnMoviesListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "search/movie" + ConfigManager.getInstance().addApiKeyToRequest() + "&query=" + searchText + "&page=" + page;
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().CANCELALLPENDINGREQUESTS();
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+
+                ArrayList<Movie> movies = parseJsonToMoviesList(result);
+                int totalPages = 0;
+                try {
+                    totalPages = result.getInt("total_pages");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(movies, totalPages);
                 return false;
             }
 

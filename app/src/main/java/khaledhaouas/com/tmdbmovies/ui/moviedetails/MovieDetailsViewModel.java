@@ -23,10 +23,16 @@ public class MovieDetailsViewModel extends ViewModel {
     private CreditsRepos mCreditRepos;
     private ReviewsRepos mReviewRepos;
 
+    private int mMovieId;
     private Movie mMovie;
     private ArrayList<Credit> mCredits;
     private ArrayList<Review> mReviews;
     private ArrayList<Movie> mSimilarMovies;
+
+    private int mCurrentSimilarMoviesPage;
+    private int mTotalSimilarMoviesPage;
+
+    private boolean isNextPageLoading = false;
 
     public MovieDetailsViewModel() {
         mMovieRepos = new MoviesRepos();
@@ -38,8 +44,8 @@ public class MovieDetailsViewModel extends ViewModel {
         mSimilarMovies = new ArrayList<>();
     }
 
-    public void getMovieDetails(int id, final OnMovieLoadedCallback callback) {
-        mMovieRepos.getMovieDetails(id, new OnMovieLoadedCallback() {
+    public void getMovieDetails(final OnMovieLoadedCallback callback) {
+        mMovieRepos.getMovieDetails(mMovieId, new OnMovieLoadedCallback() {
             @Override
             public void onSuccess(Movie movie) {
                 mMovie = movie;
@@ -54,8 +60,8 @@ public class MovieDetailsViewModel extends ViewModel {
 
     }
 
-    public void getMovieCreditList(int id, final OnCreditListLoadedCallback callback) {
-        mCreditRepos.getMovieCreditsList(id, new OnCreditListLoadedCallback() {
+    public void getMovieCreditList(final OnCreditListLoadedCallback callback) {
+        mCreditRepos.getMovieCreditsList(mMovieId, new OnCreditListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Credit> credits) {
                 mCredits.clear();
@@ -70,8 +76,8 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public void getMovieReviewList(int id, final OnReviewListLoadedCallback callback) {
-        mReviewRepos.getMovieReviewsList(id, new OnReviewListLoadedCallback() {
+    public void getMovieReviewList(final OnReviewListLoadedCallback callback) {
+        mReviewRepos.getMovieReviewsList(mMovieId, new OnReviewListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Review> reviews) {
                 mReviews.clear();
@@ -86,13 +92,15 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public void getSimilarMoviesList(int id, final OnMoviesListLoadedCallback callback) {
-        mMovieRepos.getSimilarMoviesList(id, new OnMoviesListLoadedCallback() {
+    public void getSimilarMoviesList(final OnMoviesListLoadedCallback callback) {
+        mMovieRepos.getSimilarMoviesList(mMovieId, new OnMoviesListLoadedCallback() {
             @Override
-            public void onSuccess(ArrayList<Movie> movies) {
+            public void onSuccess(ArrayList<Movie> movies, int totalPages) {
                 mSimilarMovies.clear();
                 mSimilarMovies.addAll(movies);
-                callback.onSuccess(movies);
+                mCurrentSimilarMoviesPage++;
+                mTotalSimilarMoviesPage = totalPages;
+                callback.onSuccess(movies, totalPages);
             }
 
             @Override
@@ -102,8 +110,27 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public void getMovieVideosList(int id, final OnVideoListLoadedCallback callback) {
-        mMovieRepos.getMovieVideosList(id, new OnVideoListLoadedCallback() {
+    public void getNextPageSimilarMoviesList(int id, final OnMoviesListLoadedCallback callback) {
+        isNextPageLoading = true;
+        mMovieRepos.getSimilarMoviesList(id, new OnMoviesListLoadedCallback() {
+            @Override
+            public void onSuccess(ArrayList<Movie> movies, int totalPages) {
+                mSimilarMovies.addAll(movies);
+                mCurrentSimilarMoviesPage++;
+                isNextPageLoading = false;
+                callback.onSuccess(movies, totalPages);
+            }
+
+            @Override
+            public void onError() {
+                isNextPageLoading = false;
+                callback.onError();
+            }
+        });
+    }
+
+    public void getMovieVideosList(final OnVideoListLoadedCallback callback) {
+        mMovieRepos.getMovieVideosList(mMovieId, new OnVideoListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Video> videos) {
                 callback.onSuccess(videos);
@@ -114,6 +141,14 @@ public class MovieDetailsViewModel extends ViewModel {
                 callback.onError();
             }
         });
+    }
+
+    public int getMovieId() {
+        return mMovieId;
+    }
+
+    public void setMovieId(int mMovieId) {
+        this.mMovieId = mMovieId;
     }
 
     public Movie getMovie() {
@@ -130,5 +165,17 @@ public class MovieDetailsViewModel extends ViewModel {
 
     public ArrayList<Movie> getmSimilarMovies() {
         return mSimilarMovies;
+    }
+
+    public int getCurrentSimilarMoviesPage() {
+        return mCurrentSimilarMoviesPage;
+    }
+
+    public int getTotalSimilarMoviesPage() {
+        return mTotalSimilarMoviesPage;
+    }
+
+    public boolean isNextPageLoading() {
+        return isNextPageLoading;
     }
 }
