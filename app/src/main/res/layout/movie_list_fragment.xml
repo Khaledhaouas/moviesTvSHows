@@ -51,13 +51,12 @@
             app:tabSelectedTextColor="#ff1744"
             app:tabTextColor="#78ff1744" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/layout_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/layout_bg_round_corners"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <EditText
                 android:id="@+id/edt_search_text"
@@ -65,12 +64,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="40dp"
                 android:hint="Search"
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:maxLines="1" />
-        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_hide_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/multiply"
+                android:tint="@android:color/black" />
+
+
+        </RelativeLayout>
 
 
     </FrameLayout>

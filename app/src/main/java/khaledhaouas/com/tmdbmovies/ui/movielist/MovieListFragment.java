@@ -19,7 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -38,9 +38,10 @@ public class MovieListFragment extends Fragment {
     private RecyclerView mRVMoviesList;
     private TabLayout mTabsMovieListType;
     private EditText mEdtSearchMovies;
-    private LinearLayout mLayoutSearch;
+    private RelativeLayout mLayoutSearch;
     private ViewGroup mLayoutSearchParent;
     private ImageView mImgSearch;
+    private ImageView mImgHideSearch;
     private boolean isUp = false;
 
     public static MovieListFragment newInstance() {
@@ -103,6 +104,7 @@ public class MovieListFragment extends Fragment {
             mLayoutSearch = getActivity().findViewById(R.id.layout_search);
             mImgSearch = getActivity().findViewById(R.id.btn_search);
             mLayoutSearchParent = (ViewGroup) mLayoutSearch.getParent();
+            mImgHideSearch = getActivity().findViewById(R.id.img_hide_search);
 
             slideDown(mLayoutSearch);
             isUp = false;
@@ -123,12 +125,16 @@ public class MovieListFragment extends Fragment {
                 if (!isUp) {
                     isUp = true;
                     slideUp(mLayoutSearch);
-
-                } else {
-                    slideDown(mLayoutSearch);
-                    isUp = false;
-
                 }
+            }
+        });
+
+        mImgHideSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                slideDown(mLayoutSearch);
+                isUp = false;
             }
         });
 
