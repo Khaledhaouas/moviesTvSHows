@@ -28,6 +28,7 @@ import khaledhaouas.com.tmdbmovies.adapters.MoviesRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.models.entities.Movie;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.ui.moviedetails.MovieDetailsFragment;
+import khaledhaouas.com.tmdbmovies.utils.Utils;
 
 public class MovieListFragment extends Fragment {
     private static final String TAG = "MovieListFragment";
@@ -113,6 +114,7 @@ public class MovieListFragment extends Fragment {
                 switchTabs(mTabsMovieListType.getSelectedTabPosition());
 
                 slideDown(mLayoutSearch);
+                Utils.hideKeyboard(getActivity());
                 isUp = false;
             }
         });
