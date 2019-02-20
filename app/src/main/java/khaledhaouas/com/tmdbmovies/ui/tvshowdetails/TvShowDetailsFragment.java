@@ -1,4 +1,4 @@
-package khaledhaouas.com.tmdbmovies.ui.moviedetails;
+package khaledhaouas.com.tmdbmovies.ui.tvshowdetails;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -28,44 +28,45 @@ import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.R;
 import khaledhaouas.com.tmdbmovies.adapters.CreditsRecyclerViewAdapter;
-import khaledhaouas.com.tmdbmovies.adapters.MoviesRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.adapters.ReviewsRecyclerViewAdapter;
+import khaledhaouas.com.tmdbmovies.adapters.TvShowsRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.adapters.VideosRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
-import khaledhaouas.com.tmdbmovies.models.entities.Movie;
 import khaledhaouas.com.tmdbmovies.models.entities.Review;
+import khaledhaouas.com.tmdbmovies.models.entities.TvShow;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.ui.tvshowdetails.TvShowDetailsViewModel;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
 import static android.view.View.GONE;
 
 //import com.google.android.youtube.player.YouTubePlayerView;
 
-public class MovieDetailsFragment extends Fragment {
+public class TvShowDetailsFragment extends Fragment {
     private static final String TAG = "TvShowDetailsFragment";
 
-    private MovieDetailsViewModel mViewModel;
+    private TvShowDetailsViewModel mViewModel;
 
     //UI elements
     private ScrollView mScrollViewMainContent;
 
-    private ImageView mImgMovieBackground;
-    private ImageView mImgMoviePoster;
-    private TextView mTxtMovieTitle;
-    private TextView mTxtMovieGenres;
-    private RatingBar mRtMovieRating;
-    private TextView mTxtMovieReviewNbrs;
-    private TextView mTxtMovieReleaseDate;
-    private TextView mTxtMovieRunTime;
-    private TextView mTxtMovieLang;
-    private TextView mTxtMoviePlot;
+    private ImageView mImgTvShowBackground;
+    private ImageView mImgTvShowPoster;
+    private TextView mTxtTvShowTitle;
+    private TextView mTxtTvShowGenres;
+    private RatingBar mRtTvShowRating;
+    private TextView mTxtTvShowReviewNbrs;
+    private TextView mTxtTvShowReleaseDate;
+    private TextView mTxtTvShowRunTime;
+    private TextView mTxtTvShowLang;
+    private TextView mTxtTvShowPlot;
 
-    private TabLayout mTabsMovieType;
+    private TabLayout mTabsTvShowType;
 
     private LinearLayout mLayoutSynopsis;
     private LinearLayout mLayoutCast;
@@ -78,11 +79,11 @@ public class MovieDetailsFragment extends Fragment {
     private RecyclerView mRVVideosList;
     private RecyclerView mRVCreditList;
     private RecyclerView mRVReviewList;
-    private RecyclerView mRVSimilarMoviesList;
+    private RecyclerView mRVSimilarTvShowsList;
 
 
-    public static MovieDetailsFragment newInstance() {
-        return new MovieDetailsFragment();
+    public static TvShowDetailsFragment newInstance() {
+        return new TvShowDetailsFragment();
     }
 
     @Nullable
@@ -90,7 +91,7 @@ public class MovieDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.movie_details_fragment, container, false);
+        View v = inflater.inflate(R.layout.tv_show_details_fragment, container, false);
         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
@@ -102,30 +103,30 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(TvShowDetailsViewModel.class);
         // TODO: Use the ViewModel
         if (getArguments() != null) {
-            mViewModel.setMovieId(getArguments().getInt("MovieId"));
+            mViewModel.setTvShowId(getArguments().getInt("TvShowId"));
         }
 
         initUIElements();
         initUIEvents();
         initTabLayout();
 
-        mViewModel.getMovieDetails(new OnMovieLoadedCallback() {
+        mViewModel.getTvShowDetails(new OnTvShowLoadedCallback() {
             @Override
-            public void onSuccess(Movie movie) {
+            public void onSuccess(TvShow tvShow) {
 
-                loadImageFromURL(mImgMovieBackground, movie.getBackgroundImageUrl());
-                loadRoundedImageFromURL(mImgMoviePoster, movie.getPosterImageUrl());
-                mTxtMovieTitle.setText(movie.getTitle());
-                mTxtMovieGenres.setText(movie.getGenres());
-                mRtMovieRating.setRating((float) movie.getRating() / 2);
-                mTxtMovieReviewNbrs.setText(movie.getReviewNbrs() + "");
-                mTxtMoviePlot.setText(movie.getPlot());
-                mTxtMovieRunTime.setText(Utils.formatTimeFromMinutes(movie.getRunTime()));
-                mTxtMovieLang.setText(Utils.getCountryFromCode(movie.getLanguage()));
-                mTxtMovieReleaseDate.setText(movie.getReleaseDate());
+                loadImageFromURL(mImgTvShowBackground, tvShow.getBackgroundImageUrl());
+                loadRoundedImageFromURL(mImgTvShowPoster, tvShow.getPosterImageUrl());
+                mTxtTvShowTitle.setText(tvShow.getTitle());
+                mTxtTvShowGenres.setText(tvShow.getGenres());
+                mRtTvShowRating.setRating((float) tvShow.getRating() / 2);
+                mTxtTvShowReviewNbrs.setText(tvShow.getReviewNbrs() + "");
+                mTxtTvShowPlot.setText(tvShow.getPlot());
+                mTxtTvShowRunTime.setText(tvShow.getSeasonNbre()+"");
+                mTxtTvShowLang.setText(Utils.getCountryFromCode(tvShow.getLanguage()));
+                mTxtTvShowReleaseDate.setText(tvShow.getFirstEpDate());
             }
 
             @Override
@@ -134,7 +135,7 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
 
-        mViewModel.getMovieVideosList(new OnVideoListLoadedCallback() {
+        mViewModel.getTvShowVideosList(new OnVideoListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Video> videos) {
                 mRVVideosList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -153,16 +154,16 @@ public class MovieDetailsFragment extends Fragment {
         try {
             mScrollViewMainContent = getActivity().findViewById(R.id.scroll_movie_details);
 
-            mImgMovieBackground = getActivity().findViewById(R.id.img_movie_background);
-            mImgMoviePoster = getActivity().findViewById(R.id.img_movie_poster);
-            mTxtMovieTitle = getActivity().findViewById(R.id.txt_movie_title);
-            mTxtMovieGenres = getActivity().findViewById(R.id.txt_movie_genres);
-            mTxtMovieReviewNbrs = getActivity().findViewById(R.id.txt_movie_reviews_nbre);
-            mTxtMovieReleaseDate = getActivity().findViewById(R.id.txt_movie_release_date);
-            mTxtMovieRunTime = getActivity().findViewById(R.id.txt_movie_runtime);
-            mTxtMovieLang = getActivity().findViewById(R.id.txt_movie_language);
-            mTxtMoviePlot = getActivity().findViewById(R.id.txt_movie_plot);
-            mRtMovieRating = getActivity().findViewById(R.id.txt_movie_rating);
+            mImgTvShowBackground = getActivity().findViewById(R.id.img_movie_background);
+            mImgTvShowPoster = getActivity().findViewById(R.id.img_movie_poster);
+            mTxtTvShowTitle = getActivity().findViewById(R.id.txt_movie_title);
+            mTxtTvShowGenres = getActivity().findViewById(R.id.txt_movie_genres);
+            mTxtTvShowReviewNbrs = getActivity().findViewById(R.id.txt_movie_reviews_nbre);
+            mTxtTvShowReleaseDate = getActivity().findViewById(R.id.txt_movie_release_date);
+            mTxtTvShowRunTime = getActivity().findViewById(R.id.txt_movie_runtime);
+            mTxtTvShowLang = getActivity().findViewById(R.id.txt_movie_language);
+            mTxtTvShowPlot = getActivity().findViewById(R.id.txt_movie_plot);
+            mRtTvShowRating = getActivity().findViewById(R.id.txt_movie_rating);
 
             mLayoutSynopsis = getActivity().findViewById(R.id.layout_overview);
             mLayoutCast = getActivity().findViewById(R.id.layout_cast);
@@ -172,12 +173,12 @@ public class MovieDetailsFragment extends Fragment {
             mRVVideosList = getActivity().findViewById(R.id.rv_videos);
             mRVCreditList = getActivity().findViewById(R.id.rv_cast);
             mRVReviewList = getActivity().findViewById(R.id.rv_reviews);
-            mRVSimilarMoviesList = getActivity().findViewById(R.id.rv_similar_movies);
+            mRVSimilarTvShowsList = getActivity().findViewById(R.id.rv_similar_movies);
             mImgEmptyReviews = getActivity().findViewById(R.id.img_empty_review);
             mImgEmptySimilar = getActivity().findViewById(R.id.img_empty_similar);
-            Utils.initRatingBar(getActivity(), mRtMovieRating);
+            Utils.initRatingBar(getActivity(), mRtTvShowRating);
 
-            mTabsMovieType = getActivity().findViewById(R.id.tabLayout);
+            mTabsTvShowType = getActivity().findViewById(R.id.tabLayout);
 
 
         } catch (Exception ex) {
@@ -187,7 +188,7 @@ public class MovieDetailsFragment extends Fragment {
 
     private void initUIEvents() {
 
-        mTabsMovieType.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+        mTabsTvShowType.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
@@ -196,7 +197,7 @@ public class MovieDetailsFragment extends Fragment {
                         break;
                     case 1:
                         if (mViewModel.getCredits().isEmpty()) {
-                            mViewModel.getMovieCreditList(new OnCreditListLoadedCallback() {
+                            mViewModel.getTvShowCreditList(new OnCreditListLoadedCallback() {
                                 @Override
                                 public void onSuccess(ArrayList<Credit> credits) {
                                     switchSelectedSection(2);
@@ -217,7 +218,7 @@ public class MovieDetailsFragment extends Fragment {
                         break;
                     case 2:
                         if (mViewModel.getmReviews().isEmpty()) {
-                            mViewModel.getMovieReviewList(new OnReviewListLoadedCallback() {
+                            mViewModel.getTvShowReviewList(new OnReviewListLoadedCallback() {
                                 @Override
                                 public void onSuccess(ArrayList<Review> reviews) {
                                     switchSelectedSection(3);
@@ -240,34 +241,34 @@ public class MovieDetailsFragment extends Fragment {
                         }
                         break;
                     case 3:
-                        if (mViewModel.getmSimilarMovies().isEmpty()) {
-                            mViewModel.getSimilarMoviesList(new OnMoviesListLoadedCallback() {
+                        if (mViewModel.getmSimilarTvShows().isEmpty()) {
+                            mViewModel.getSimilarTvShowsList(new OnTvShowListLoadedCallback() {
                                 @Override
-                                public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
+                                public void onSuccess(final ArrayList<TvShow> tvShows, int totalPages) {
                                     switchSelectedSection(4);
 
-                                    if (movies.isEmpty()) {
+                                    if (tvShows.isEmpty()) {
                                         mImgEmptySimilar.setVisibility(View.VISIBLE);
                                     } else {
                                         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                                        mRVSimilarMoviesList.setLayoutManager(layoutManager);
-                                        final MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getmSimilarMovies());
-                                        moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                                        mRVSimilarTvShowsList.setLayoutManager(layoutManager);
+                                        final TvShowsRecyclerViewAdapter tvShowsRecyclerViewAdapter = new TvShowsRecyclerViewAdapter(getActivity(), mViewModel.getmSimilarTvShows());
+                                        tvShowsRecyclerViewAdapter.setClickListener(new TvShowsRecyclerViewAdapter.ItemClickListener() {
                                             @Override
                                             public void onItemClick(View view, int position) {
-                                                Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
-                                                MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                                                Log.e(TAG, "onItemClick: " + tvShows.get(position).getTitle());
+                                                TvShowDetailsFragment tvShowDetailsFragment = TvShowDetailsFragment.newInstance();
                                                 Bundle args = new Bundle();
-                                                args.putInt("MovieId", movies.get(position).getId());
-                                                movieDetailsFragment.setArguments(args);
+                                                args.putInt("TvShowId", tvShows.get(position).getId());
+                                                tvShowDetailsFragment.setArguments(args);
                                                 getActivity().getSupportFragmentManager().beginTransaction()
-                                                        .replace(R.id.container, movieDetailsFragment)
+                                                        .replace(R.id.container, tvShowDetailsFragment)
                                                         .addToBackStack(null)
                                                         .commit();
                                             }
                                         });
-                                        mRVSimilarMoviesList.setAdapter(moviesRecyclerViewAdapter);
-//                                        mRVSimilarMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                        mRVSimilarTvShowsList.setAdapter(tvShowsRecyclerViewAdapter);
+//                                        mRVSimilarTvShowsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //                                            @Override
 //                                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
 //                                                super.onScrollStateChanged(recyclerView, newState);
@@ -280,15 +281,15 @@ public class MovieDetailsFragment extends Fragment {
 //                                                int totalItemCount = layoutManager.getItemCount();
 //                                                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 //
-//                                                if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentSimilarMoviesPage() != mViewModel.getTotalSimilarMoviesPage()) {
+//                                                if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentSimilarTvShowsPage() != mViewModel.getTotalSimilarTvShowsPage()) {
 //                                                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
 //                                                            && firstVisibleItemPosition >= 0
-//                                                            && totalItemCount >= 20 * mViewModel.getCurrentSimilarMoviesPage()) {
+//                                                            && totalItemCount >= 20 * mViewModel.getCurrentSimilarTvShowsPage()) {
 //
-//                                                        mViewModel.getNextPageSimilarMoviesList(mViewModel.getMovieId(), new OnMoviesListLoadedCallback() {
+//                                                        mViewModel.getNextPageSimilarTvShowsList(mViewModel.getTvShowId(), new OnTvShowsListLoadedCallback() {
 //                                                            @Override
-//                                                            public void onSuccess(ArrayList<Movie> movies, int totalPages) {
-//                                                                moviesRecyclerViewAdapter.notifyDataSetChanged();
+//                                                            public void onSuccess(ArrayList<TvShow> tvShows, int totalPages) {
+//                                                                tvShowsRecyclerViewAdapter.notifyDataSetChanged();
 //                                                            }
 //
 //                                                            @Override
@@ -386,10 +387,10 @@ public class MovieDetailsFragment extends Fragment {
     }
 
     private void initTabLayout() {
-        mTabsMovieType.addTab(mTabsMovieType.newTab().setText("Plot"));
-        mTabsMovieType.addTab(mTabsMovieType.newTab().setText("Cast"));
-        mTabsMovieType.addTab(mTabsMovieType.newTab().setText("Reviews"));
-        mTabsMovieType.addTab(mTabsMovieType.newTab().setText("Similar"));
+        mTabsTvShowType.addTab(mTabsTvShowType.newTab().setText("Plot"));
+        mTabsTvShowType.addTab(mTabsTvShowType.newTab().setText("Cast"));
+        mTabsTvShowType.addTab(mTabsTvShowType.newTab().setText("Reviews"));
+        mTabsTvShowType.addTab(mTabsTvShowType.newTab().setText("Similar"));
     }
 
 

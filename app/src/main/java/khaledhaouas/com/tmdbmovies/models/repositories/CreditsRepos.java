@@ -38,6 +38,27 @@ public class CreditsRepos {
         });
     }
 
+    public void getTvCreditsList(int id, final OnCreditListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "movie/" + id + "/credits" + ConfigManager.getInstance().addApiKeyToRequest();
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Credit> credits = parseJsonToCreditsList(result);
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(credits);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
     private ArrayList<Credit> parseJsonToCreditsList(JSONObject jsonCredits) {
         ArrayList<Credit> credits = new ArrayList<>();
         try {

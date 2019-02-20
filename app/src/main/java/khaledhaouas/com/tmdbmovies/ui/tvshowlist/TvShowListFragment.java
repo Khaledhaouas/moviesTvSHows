@@ -1,4 +1,4 @@
-package khaledhaouas.com.tmdbmovies.ui.movielist;
+package khaledhaouas.com.tmdbmovies.ui.tvshowlist;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -24,31 +24,31 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.R;
-import khaledhaouas.com.tmdbmovies.adapters.MoviesRecyclerViewAdapter;
-import khaledhaouas.com.tmdbmovies.models.entities.Movie;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
-import khaledhaouas.com.tmdbmovies.ui.moviedetails.MovieDetailsFragment;
+import khaledhaouas.com.tmdbmovies.adapters.TvShowsRecyclerViewAdapter;
+import khaledhaouas.com.tmdbmovies.models.entities.TvShow;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.ui.tvshowdetails.TvShowDetailsFragment;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
-public class MovieListFragment extends Fragment {
+public class TvShowListFragment extends Fragment {
     private static final String TAG = "TvShowListFragment";
 
-    private MovieListViewModel mViewModel;
+    private TvShowListViewModel mViewModel;
 
     //UI Elements
-    private RecyclerView mRVMoviesList;
-    private TabLayout mTabsMovieListType;
-    private EditText mEdtSearchMovies;
+    private RecyclerView mRVTvShowsList;
+    private TabLayout mTabsTvShowListType;
+    private EditText mEdtSearchTvShows;
     private RelativeLayout mLayoutSearch;
     private ViewGroup mLayoutSearchParent;
     private ImageView mImgSearch;
     private ImageView mImgHideSearch;
     private boolean isUp = false;
     private LinearLayoutManager layoutManager;
-    private MoviesRecyclerViewAdapter moviesRecyclerViewAdapter;
+    private TvShowsRecyclerViewAdapter tvShowsRecyclerViewAdapter;
 
-    public static MovieListFragment newInstance() {
-        return new MovieListFragment();
+    public static TvShowListFragment newInstance() {
+        return new TvShowListFragment();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MovieListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(TvShowListViewModel.class);
 
         initUIElements();
         initUIEvents();
@@ -71,9 +71,9 @@ public class MovieListFragment extends Fragment {
     private void initUIElements() {
         try {
 
-            mRVMoviesList = getActivity().findViewById(R.id.rv_similar_movies);
-            mTabsMovieListType = getActivity().findViewById(R.id.tabLayout);
-            mEdtSearchMovies = getActivity().findViewById(R.id.edt_search_text);
+            mRVTvShowsList = getActivity().findViewById(R.id.rv_similar_movies);
+            mTabsTvShowListType = getActivity().findViewById(R.id.tabLayout);
+            mEdtSearchTvShows = getActivity().findViewById(R.id.edt_search_text);
             mLayoutSearch = getActivity().findViewById(R.id.layout_search);
             mImgSearch = getActivity().findViewById(R.id.btn_search);
             mLayoutSearchParent = (ViewGroup) mLayoutSearch.getParent();
@@ -81,8 +81,8 @@ public class MovieListFragment extends Fragment {
 
             //Recycler View Setup
             layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-            mRVMoviesList.setLayoutManager(layoutManager);
-            mRVMoviesList.setItemAnimator(new DefaultItemAnimator());
+            mRVTvShowsList.setLayoutManager(layoutManager);
+            mRVTvShowsList.setItemAnimator(new DefaultItemAnimator());
 
             slideDown(mLayoutSearch);
             isUp = false;
@@ -111,7 +111,7 @@ public class MovieListFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                switchTabs(mTabsMovieListType.getSelectedTabPosition());
+                switchTabs(mTabsTvShowListType.getSelectedTabPosition());
 
                 slideDown(mLayoutSearch);
                 Utils.hideKeyboard(getActivity());
@@ -119,7 +119,7 @@ public class MovieListFragment extends Fragment {
             }
         });
 
-        mTabsMovieListType.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+        mTabsTvShowListType.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switchTabs(tab.getPosition());
@@ -136,7 +136,7 @@ public class MovieListFragment extends Fragment {
             }
         });
 
-        mEdtSearchMovies.addTextChangedListener(new TextWatcher() {
+        mEdtSearchTvShows.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -146,31 +146,31 @@ public class MovieListFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
                     final CharSequence finalS = s;
-                    mViewModel.getSearchResultMoviesList(s.toString(), new OnMoviesListLoadedCallback() {
+                    mViewModel.getSearchResultTvShowsList(s.toString(), new OnTvShowListLoadedCallback() {
                         @Override
-                        public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
-//                            Log.e("Search", movies.toString() );
+                        public void onSuccess(final ArrayList<TvShow> TvShows, int totalPages) {
+//                            Log.e("Search", TvShows.toString() );
                             final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                            mRVMoviesList.setLayoutManager(layoutManager);
-                            mRVMoviesList.setItemAnimator(new DefaultItemAnimator());
-                            final MoviesRecyclerViewAdapter moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getSearchedMovies());
-                            moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                            mRVTvShowsList.setLayoutManager(layoutManager);
+                            mRVTvShowsList.setItemAnimator(new DefaultItemAnimator());
+                            final TvShowsRecyclerViewAdapter TvShowsRecyclerViewAdapter = new TvShowsRecyclerViewAdapter(getActivity(), mViewModel.getSearchedTvShows());
+                            TvShowsRecyclerViewAdapter.setClickListener(new TvShowsRecyclerViewAdapter.ItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
-                                    Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
-                                    MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                                    Log.e(TAG, "onItemClick: " + TvShows.get(position).getTitle());
+                                    TvShowDetailsFragment tvShowDetailsFragment = TvShowDetailsFragment.newInstance();
                                     Bundle args = new Bundle();
-                                    args.putInt("MovieId", movies.get(position).getId());
-                                    movieDetailsFragment.setArguments(args);
+                                    args.putInt("TvShowId", TvShows.get(position).getId());
+                                    tvShowDetailsFragment.setArguments(args);
                                     getActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.container, movieDetailsFragment)
+                                            .replace(R.id.container, tvShowDetailsFragment)
                                             .addToBackStack(null)
                                             .commit();
                                 }
                             });
-                            mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
-                            mRVMoviesList.clearOnScrollListeners();
-                            mRVMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                            mRVTvShowsList.setAdapter(TvShowsRecyclerViewAdapter);
+                            mRVTvShowsList.clearOnScrollListeners();
+                            mRVTvShowsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                 @Override
                                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                                     super.onScrollStateChanged(recyclerView, newState);
@@ -182,15 +182,15 @@ public class MovieListFragment extends Fragment {
                                     int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
                                     int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                                     int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                                    if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentSearchedMoviesPage() != mViewModel.getTotalSearchedMoviesPage()) {
+                                    if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentSearchedTvShowsPage() != mViewModel.getTotalSearchedTvShowsPage()) {
                                         if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                                                 && firstVisibleItemPosition >= 0
-                                                && totalItemCount >= 20 * mViewModel.getCurrentUpcomingMoviesPage()) {
+                                                && totalItemCount >= 20 * mViewModel.getCurrentUpcomingTvShowsPage()) {
 
-                                            mViewModel.getNextPageSearchedMoviesList(finalS.toString(), new OnMoviesListLoadedCallback() {
+                                            mViewModel.getNextPageSearchedTvShowsList(finalS.toString(), new OnTvShowListLoadedCallback() {
                                                 @Override
-                                                public void onSuccess(ArrayList<Movie> movies, int totalPages) {
-                                                    moviesRecyclerViewAdapter.notifyDataSetChanged();
+                                                public void onSuccess(ArrayList<TvShow> TvShows, int totalPages) {
+                                                    TvShowsRecyclerViewAdapter.notifyDataSetChanged();
                                                 }
 
                                                 @Override
@@ -220,31 +220,31 @@ public class MovieListFragment extends Fragment {
     }
 
     private void initTabLayout() {
-        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Popular"));
-        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Coming Soon"));
-        mTabsMovieListType.addTab(mTabsMovieListType.newTab().setText("Now Showing"));
+        mTabsTvShowListType.addTab(mTabsTvShowListType.newTab().setText("Popular"));
+//        mTabsTvShowListType.addTab(mTabsTvShowListType.newTab().setText("Latest"));
+        mTabsTvShowListType.addTab(mTabsTvShowListType.newTab().setText("Top Rated"));
     }
 
     private void switchTabs(int tabPos) {
         switch (tabPos) {
             case 0:
-                moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getPopularMovies());
-                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                tvShowsRecyclerViewAdapter = new TvShowsRecyclerViewAdapter(getActivity(), mViewModel.getPopularTvShows());
+                tvShowsRecyclerViewAdapter.setClickListener(new TvShowsRecyclerViewAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                        TvShowDetailsFragment tvShowDetailsFragment = TvShowDetailsFragment.newInstance();
                         Bundle args = new Bundle();
-                        args.putInt("MovieId", mViewModel.getPopularMovies().get(position).getId());
-                        movieDetailsFragment.setArguments(args);
+                        args.putInt("TvShowId", mViewModel.getPopularTvShows().get(position).getId());
+                        tvShowDetailsFragment.setArguments(args);
                         getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, movieDetailsFragment)
+                                .replace(R.id.container, tvShowDetailsFragment)
                                 .addToBackStack(null)
                                 .commit();
                     }
                 });
-                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
-                mRVMoviesList.clearOnScrollListeners();
-                mRVMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                mRVTvShowsList.setAdapter(tvShowsRecyclerViewAdapter);
+                mRVTvShowsList.clearOnScrollListeners();
+                mRVTvShowsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
@@ -257,21 +257,21 @@ public class MovieListFragment extends Fragment {
                         int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                         int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                         Log.e(TAG, "isLoading " + mViewModel.isNextPageLoading() + "    "
-                                + mViewModel.getCurrentPopularMoviesPage()
-                                + "    " + mViewModel.getTotalPopularMoviesPage());
-                        if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentPopularMoviesPage() != mViewModel.getTotalPopularMoviesPage()) {
+                                + mViewModel.getCurrentPopularTvShowsPage()
+                                + "    " + mViewModel.getTotalPopularTvShowsPage());
+                        if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentPopularTvShowsPage() != mViewModel.getTotalPopularTvShowsPage()) {
                             Log.e(TAG, "isLoading 2 : " + (visibleItemCount + firstVisibleItemPosition) + "    "
                                     + totalItemCount
                                     + "    " + firstVisibleItemPosition
-                                    + "    " + (20 * mViewModel.getCurrentPopularMoviesPage()));
+                                    + "    " + (20 * mViewModel.getCurrentPopularTvShowsPage()));
                             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                                     && firstVisibleItemPosition >= 0
-                                    && totalItemCount >= 20 * mViewModel.getCurrentPopularMoviesPage()) {
+                                    && totalItemCount >= 20 * mViewModel.getCurrentPopularTvShowsPage()) {
 
-                                mViewModel.getNextPagePopularMoviesList(new OnMoviesListLoadedCallback() {
+                                mViewModel.getNextPagePopularTvShowsList(new OnTvShowListLoadedCallback() {
                                     @Override
-                                    public void onSuccess(ArrayList<Movie> movies, int totalPages) {
-                                        moviesRecyclerViewAdapter.notifyDataSetChanged();
+                                    public void onSuccess(ArrayList<TvShow> TvShows, int totalPages) {
+                                        tvShowsRecyclerViewAdapter.notifyDataSetChanged();
                                     }
 
                                     @Override
@@ -284,11 +284,11 @@ public class MovieListFragment extends Fragment {
                     }
                 });
 
-                if (mViewModel.getPopularMovies().isEmpty()) {
-                    mViewModel.getPopularMoviesList(new OnMoviesListLoadedCallback() {
+                if (mViewModel.getPopularTvShows().isEmpty()) {
+                    mViewModel.getPopularTvShowsList(new OnTvShowListLoadedCallback() {
                         @Override
-                        public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
-                            moviesRecyclerViewAdapter.notifyDataSetChanged();
+                        public void onSuccess(final ArrayList<TvShow> TvShows, int totalPages) {
+                            tvShowsRecyclerViewAdapter.notifyDataSetChanged();
                         }
 
                         @Override
@@ -300,23 +300,24 @@ public class MovieListFragment extends Fragment {
 
                 break;
             case 1:
-                moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getUpcomingMovies());
-                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
+                tvShowsRecyclerViewAdapter = new TvShowsRecyclerViewAdapter(getActivity(), mViewModel.getTopRatedTvShows());
+                tvShowsRecyclerViewAdapter.setClickListener(new TvShowsRecyclerViewAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
+                        Log.e(TAG, "onItemClick: " + mViewModel.getTopRatedTvShows().get(position).getTitle());
+                        TvShowDetailsFragment tvShowDetailsFragment = TvShowDetailsFragment.newInstance();
                         Bundle args = new Bundle();
-                        args.putInt("MovieId", mViewModel.getUpcomingMovies().get(position).getId());
-                        movieDetailsFragment.setArguments(args);
+                        args.putInt("TvShowId", mViewModel.getTopRatedTvShows().get(position).getId());
+                        tvShowDetailsFragment.setArguments(args);
                         getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, movieDetailsFragment)
+                                .replace(R.id.container, tvShowDetailsFragment)
                                 .addToBackStack(null)
                                 .commit();
                     }
                 });
-                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
-                mRVMoviesList.clearOnScrollListeners();
-                mRVMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                mRVTvShowsList.setAdapter(tvShowsRecyclerViewAdapter);
+                mRVTvShowsList.clearOnScrollListeners();
+                mRVTvShowsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
@@ -328,15 +329,15 @@ public class MovieListFragment extends Fragment {
                         int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
                         int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                         int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentUpcomingMoviesPage() != mViewModel.getTotalUpcomingMoviesPage()) {
+                        if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentTopRatedTvShowsPage() != mViewModel.getTotalTopRatedTvShowsPage()) {
                             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                                     && firstVisibleItemPosition >= 0
-                                    && totalItemCount >= 20 * mViewModel.getCurrentUpcomingMoviesPage()) {
+                                    && totalItemCount >= 20 * mViewModel.getCurrentTopRatedTvShowsPage()) {
 
-                                mViewModel.getNextPageUpcomingMoviesList(new OnMoviesListLoadedCallback() {
+                                mViewModel.getNextPageTopRatedTvShowsList(new OnTvShowListLoadedCallback() {
                                     @Override
-                                    public void onSuccess(ArrayList<Movie> movies, int totalPages) {
-                                        moviesRecyclerViewAdapter.notifyDataSetChanged();
+                                    public void onSuccess(ArrayList<TvShow> TvShows, int totalPages) {
+                                        tvShowsRecyclerViewAdapter.notifyDataSetChanged();
                                     }
 
                                     @Override
@@ -348,77 +349,11 @@ public class MovieListFragment extends Fragment {
                         }
                     }
                 });
-
-                if (mViewModel.getUpcomingMovies().isEmpty()) {
-                    mViewModel.getUpcomingMoviesList(new OnMoviesListLoadedCallback() {
+                if (mViewModel.getTopRatedTvShows().isEmpty()) {
+                    mViewModel.getTopRatedTvShowsList(new OnTvShowListLoadedCallback() {
                         @Override
-                        public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
-                            moviesRecyclerViewAdapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    });
-                }
-
-                break;
-            case 2:
-                moviesRecyclerViewAdapter = new MoviesRecyclerViewAdapter(getActivity(), mViewModel.getNowPlayingMovies());
-                moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Log.e(TAG, "onItemClick: " + mViewModel.getNowPlayingMovies().get(position).getTitle());
-                        MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
-                        Bundle args = new Bundle();
-                        args.putInt("MovieId", mViewModel.getNowPlayingMovies().get(position).getId());
-                        movieDetailsFragment.setArguments(args);
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, movieDetailsFragment)
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                });
-                mRVMoviesList.setAdapter(moviesRecyclerViewAdapter);
-                mRVMoviesList.clearOnScrollListeners();
-                mRVMoviesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-                    }
-
-                    @Override
-                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
-                        int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
-                        int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                        int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentNowPlayingMoviesPage() != mViewModel.getTotalNowPlayingMoviesPage()) {
-                            if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                                    && firstVisibleItemPosition >= 0
-                                    && totalItemCount >= 20 * mViewModel.getCurrentNowPlayingMoviesPage()) {
-
-                                mViewModel.getNextPageNowPlayingMoviesList(new OnMoviesListLoadedCallback() {
-                                    @Override
-                                    public void onSuccess(ArrayList<Movie> movies, int totalPages) {
-                                        moviesRecyclerViewAdapter.notifyDataSetChanged();
-                                    }
-
-                                    @Override
-                                    public void onError() {
-
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
-                if (mViewModel.getNowPlayingMovies().isEmpty()) {
-                    mViewModel.getNowPlayingMoviesList(new OnMoviesListLoadedCallback() {
-                        @Override
-                        public void onSuccess(final ArrayList<Movie> movies, int totalPages) {
-                            moviesRecyclerViewAdapter.notifyDataSetChanged();
+                        public void onSuccess(final ArrayList<TvShow> TvShows, int totalPages) {
+                            tvShowsRecyclerViewAdapter.notifyDataSetChanged();
                         }
 
                         @Override

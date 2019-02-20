@@ -38,6 +38,27 @@ public class ReviewsRepos {
         });
     }
 
+    public void getTvReviewsList(int id, final OnReviewListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "tv/" + id + "/reviews" + ConfigManager.getInstance().addApiKeyToRequest();
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Review> reviews = parseJsonToReviewsList(result);
+//                Log.e(TAG, movie.toString());
+                callback.onSuccess(reviews);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
     private ArrayList<Review> parseJsonToReviewsList(JSONObject jsonReviews) {
         ArrayList<Review> reviews = new ArrayList<>();
         try {

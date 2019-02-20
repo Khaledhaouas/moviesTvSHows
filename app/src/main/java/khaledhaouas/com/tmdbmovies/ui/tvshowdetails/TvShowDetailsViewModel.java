@@ -1,55 +1,56 @@
-package khaledhaouas.com.tmdbmovies.ui.moviedetails;
+package khaledhaouas.com.tmdbmovies.ui.tvshowdetails;
 
 import android.arch.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
-import khaledhaouas.com.tmdbmovies.models.entities.Movie;
 import khaledhaouas.com.tmdbmovies.models.entities.Review;
+import khaledhaouas.com.tmdbmovies.models.entities.TvShow;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnMovieLoadedCallback;
-import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.repositories.CreditsRepos;
-import khaledhaouas.com.tmdbmovies.models.repositories.MoviesRepos;
 import khaledhaouas.com.tmdbmovies.models.repositories.ReviewsRepos;
+import khaledhaouas.com.tmdbmovies.models.repositories.TvShowsRepos;
 
-public class MovieDetailsViewModel extends ViewModel {
+
+public class TvShowDetailsViewModel extends ViewModel {
     private static final String TAG = "TvShowDetailsViewModel";
-    private MoviesRepos mMovieRepos;
+    private TvShowsRepos mTvShowRepos;
     private CreditsRepos mCreditRepos;
     private ReviewsRepos mReviewRepos;
 
-    private int mMovieId;
-    private Movie mMovie;
+    private int mTvShowId;
+    private TvShow mTvShow;
     private ArrayList<Credit> mCredits;
     private ArrayList<Review> mReviews;
-    private ArrayList<Movie> mSimilarMovies;
+    private ArrayList<TvShow> mSimilarTvShows;
 
-    private int mCurrentSimilarMoviesPage;
-    private int mTotalSimilarMoviesPage;
+    private int mCurrentSimilarTvShowsPage;
+    private int mTotalSimilarTvShowsPage;
 
     private boolean isNextPageLoading = false;
 
-    public MovieDetailsViewModel() {
-        mMovieRepos = new MoviesRepos();
+    public TvShowDetailsViewModel() {
+        mTvShowRepos = new TvShowsRepos();
         mCreditRepos = new CreditsRepos();
         mReviewRepos = new ReviewsRepos();
 
         mReviews = new ArrayList<>();
         mCredits = new ArrayList<>();
-        mSimilarMovies = new ArrayList<>();
+        mSimilarTvShows = new ArrayList<>();
     }
 
-    public void getMovieDetails(final OnMovieLoadedCallback callback) {
-        mMovieRepos.getMovieDetails(mMovieId, new OnMovieLoadedCallback() {
+    public void getTvShowDetails(final OnTvShowLoadedCallback callback) {
+        mTvShowRepos.getTvShowDetails(mTvShowId, new OnTvShowLoadedCallback() {
             @Override
-            public void onSuccess(Movie movie) {
-                mMovie = movie;
-                callback.onSuccess(movie);
+            public void onSuccess(TvShow tvShow) {
+                mTvShow = tvShow;
+                callback.onSuccess(tvShow);
             }
 
             @Override
@@ -60,8 +61,8 @@ public class MovieDetailsViewModel extends ViewModel {
 
     }
 
-    public void getMovieCreditList(final OnCreditListLoadedCallback callback) {
-        mCreditRepos.getMovieCreditsList(mMovieId, new OnCreditListLoadedCallback() {
+    public void getTvShowCreditList(final OnCreditListLoadedCallback callback) {
+        mCreditRepos.getTvCreditsList(mTvShowId, new OnCreditListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Credit> credits) {
                 mCredits.clear();
@@ -76,8 +77,8 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public void getMovieReviewList(final OnReviewListLoadedCallback callback) {
-        mReviewRepos.getMovieReviewsList(mMovieId, new OnReviewListLoadedCallback() {
+    public void getTvShowReviewList(final OnReviewListLoadedCallback callback) {
+        mReviewRepos.getTvReviewsList(mTvShowId, new OnReviewListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Review> reviews) {
                 mReviews.clear();
@@ -92,15 +93,15 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public void getSimilarMoviesList(final OnMoviesListLoadedCallback callback) {
-        mMovieRepos.getSimilarMoviesList(mMovieId, new OnMoviesListLoadedCallback() {
+    public void getSimilarTvShowsList(final OnTvShowListLoadedCallback callback) {
+        mTvShowRepos.getSimilarTvShowsList(mTvShowId, new OnTvShowListLoadedCallback() {
             @Override
-            public void onSuccess(ArrayList<Movie> movies, int totalPages) {
-                mSimilarMovies.clear();
-                mSimilarMovies.addAll(movies);
-                mCurrentSimilarMoviesPage++;
-                mTotalSimilarMoviesPage = totalPages;
-                callback.onSuccess(movies, totalPages);
+            public void onSuccess(ArrayList<TvShow> tvShows, int totalPages) {
+                mSimilarTvShows.clear();
+                mSimilarTvShows.addAll(tvShows);
+                mCurrentSimilarTvShowsPage++;
+                mTotalSimilarTvShowsPage = totalPages;
+                callback.onSuccess(tvShows, totalPages);
             }
 
             @Override
@@ -110,15 +111,15 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public void getNextPageSimilarMoviesList(int id, final OnMoviesListLoadedCallback callback) {
+    public void getNextPageSimilarTvShowsList(int id, final OnTvShowListLoadedCallback callback) {
         isNextPageLoading = true;
-        mMovieRepos.getSimilarMoviesList(id, new OnMoviesListLoadedCallback() {
+        mTvShowRepos.getSimilarTvShowsList(id, new OnTvShowListLoadedCallback() {
             @Override
-            public void onSuccess(ArrayList<Movie> movies, int totalPages) {
-                mSimilarMovies.addAll(movies);
-                mCurrentSimilarMoviesPage++;
+            public void onSuccess(ArrayList<TvShow> tvShows, int totalPages) {
+                mSimilarTvShows.addAll(tvShows);
+                mCurrentSimilarTvShowsPage++;
                 isNextPageLoading = false;
-                callback.onSuccess(movies, totalPages);
+                callback.onSuccess(tvShows, totalPages);
             }
 
             @Override
@@ -129,8 +130,8 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public void getMovieVideosList(final OnVideoListLoadedCallback callback) {
-        mMovieRepos.getMovieVideosList(mMovieId, new OnVideoListLoadedCallback() {
+    public void getTvShowVideosList(final OnVideoListLoadedCallback callback) {
+        mTvShowRepos.getTvShowVideosList(mTvShowId, new OnVideoListLoadedCallback() {
             @Override
             public void onSuccess(ArrayList<Video> videos) {
                 callback.onSuccess(videos);
@@ -143,16 +144,16 @@ public class MovieDetailsViewModel extends ViewModel {
         });
     }
 
-    public int getMovieId() {
-        return mMovieId;
+    public int getTvShowId() {
+        return mTvShowId;
     }
 
-    public void setMovieId(int mMovieId) {
-        this.mMovieId = mMovieId;
+    public void setTvShowId(int mTvShowId) {
+        this.mTvShowId = mTvShowId;
     }
 
-    public Movie getMovie() {
-        return mMovie;
+    public TvShow getTvShow() {
+        return mTvShow;
     }
 
     public ArrayList<Credit> getCredits() {
@@ -163,16 +164,16 @@ public class MovieDetailsViewModel extends ViewModel {
         return mReviews;
     }
 
-    public ArrayList<Movie> getmSimilarMovies() {
-        return mSimilarMovies;
+    public ArrayList<TvShow> getmSimilarTvShows() {
+        return mSimilarTvShows;
     }
 
-    public int getCurrentSimilarMoviesPage() {
-        return mCurrentSimilarMoviesPage;
+    public int getCurrentSimilarTvShowsPage() {
+        return mCurrentSimilarTvShowsPage;
     }
 
-    public int getTotalSimilarMoviesPage() {
-        return mTotalSimilarMoviesPage;
+    public int getTotalSimilarTvShowsPage() {
+        return mTotalSimilarTvShowsPage;
     }
 
     public boolean isNextPageLoading() {

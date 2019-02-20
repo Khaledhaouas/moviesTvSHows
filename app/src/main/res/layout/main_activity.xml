@@ -13,7 +13,7 @@
         tools:context=".activities.MainActivity" />
 
     <android.support.design.widget.BottomNavigationView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/navigation"
+        android:id="@+id/navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="start|bottom"

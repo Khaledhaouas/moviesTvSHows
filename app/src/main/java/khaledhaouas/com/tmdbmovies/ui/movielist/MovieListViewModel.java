@@ -10,7 +10,7 @@ import khaledhaouas.com.tmdbmovies.models.interfaces.OnMoviesListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.repositories.MoviesRepos;
 
 public class MovieListViewModel extends ViewModel {
-    private static final String TAG = "MovieListViewModel";
+    private static final String TAG = "TvShowListViewModel";
     private MoviesRepos mMovieRepos;
 
     private int mCurrentPopularMoviesPage;
