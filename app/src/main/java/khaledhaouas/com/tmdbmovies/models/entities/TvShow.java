@@ -1,5 +1,9 @@
 package khaledhaouas.com.tmdbmovies.models.entities;
 
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+
 public class TvShow {
     private int id;
     private String backgroundImageUrl;
@@ -14,14 +18,17 @@ public class TvShow {
     private String plot;
     private int seasonNbre;
     private int epNbre;
-//    private String networkName;
-//    private String networkLogo;
+    private ArrayList<Season> seasons;
+    private ArrayList<Company> networks;
 
     public TvShow() {
+        seasons = new ArrayList<>();
+        networks = new ArrayList<>();
     }
 
     public TvShow(int id, String backgroundImageUrl, String posterImageUrl, String title, String genres,
                   double rating, int reviewNbrs, String firstEpDate, int epRunTime, String language, String plot) {
+        this();
         this.id = id;
         this.backgroundImageUrl = backgroundImageUrl;
         this.posterImageUrl = posterImageUrl;
@@ -37,6 +44,7 @@ public class TvShow {
 
     public TvShow(String backgroundImageUrl, String posterImageUrl, String title, String genres,
                   double rating, int reviewNbrs, String firstEpDate, int epRunTime, String language, String plot) {
+        this();
         this.backgroundImageUrl = backgroundImageUrl;
         this.posterImageUrl = posterImageUrl;
         this.title = title;
@@ -153,9 +161,26 @@ public class TvShow {
         this.epNbre = epNbre;
     }
 
+    public ArrayList<Season> getSeasons() {
+        return seasons;
+    }
+
+    public void setSeasons(ArrayList<Season> seasons) {
+        this.seasons = seasons;
+    }
+
+    public ArrayList<Company> getNetworks() {
+        return networks;
+    }
+
+    public void setNetworks(ArrayList<Company> networks) {
+        this.networks = networks;
+    }
+
+    @NonNull
     @Override
     public String toString() {
-        return "Movie{" +
+        return "TvShow{" +
                 "id=" + id +
                 ", backgroundImageUrl='" + backgroundImageUrl + '\'' +
                 ", posterImageUrl='" + posterImageUrl + '\'' +
@@ -167,6 +192,10 @@ public class TvShow {
                 ", epRunTime=" + epRunTime +
                 ", language='" + language + '\'' +
                 ", plot='" + plot + '\'' +
+                ", seasonNbre=" + seasonNbre +
+                ", epNbre=" + epNbre +
+                ", seasons=" + seasons +
+                ", networks=" + networks +
                 '}';
     }
 }

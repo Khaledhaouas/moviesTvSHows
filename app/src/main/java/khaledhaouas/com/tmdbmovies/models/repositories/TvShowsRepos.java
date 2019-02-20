@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiManager;
 import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiServerCallback;
 import khaledhaouas.com.tmdbmovies.managers.ConfigManager;
+import khaledhaouas.com.tmdbmovies.models.entities.Company;
+import khaledhaouas.com.tmdbmovies.models.entities.Season;
 import khaledhaouas.com.tmdbmovies.models.entities.TvShow;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowListLoadedCallback;
@@ -55,6 +57,28 @@ public class TvShowsRepos {
             resTvShow.setRating(jsonShow.getDouble("vote_average"));
             resTvShow.setEpNbre(jsonShow.getInt("number_of_episodes"));
             resTvShow.setSeasonNbre(jsonShow.getInt("number_of_seasons"));
+            JSONArray networksArray = jsonShow.getJSONArray("networks");
+            for (int j = 0; j < networksArray.length(); j++) {
+                Company c = new Company();
+                c.setId(((JSONObject) networksArray.get(j)).getInt("id"));
+                c.setName(((JSONObject) networksArray.get(j)).getString("name"));
+                c.setCountry(((JSONObject) networksArray.get(j)).getString("origin_country"));
+                c.setLogoImage("https://image.tmdb.org/t/p/w92" + ((JSONObject) networksArray.get(j)).getString("logo_path"));
+                resTvShow.getNetworks().add(c);
+            }
+
+            JSONArray seasonsArray = jsonShow.getJSONArray("seasons");
+            for (int j = 0; j < seasonsArray.length(); j++) {
+                Season s = new Season();
+                s.setId(((JSONObject) seasonsArray.get(j)).getInt("id"));
+                s.setName(((JSONObject) seasonsArray.get(j)).getString("name"));
+                s.setAirDate(((JSONObject) seasonsArray.get(j)).getString("air_date"));
+                s.setEpisodeCount(((JSONObject) seasonsArray.get(j)).getInt("episode_count"));
+                s.setOverview(((JSONObject) seasonsArray.get(j)).getString("overview"));
+                s.setNumber(((JSONObject) seasonsArray.get(j)).getInt("season_number"));
+                s.setPosterImage("https://image.tmdb.org/t/p/w185" + ((JSONObject) seasonsArray.get(j)).getString("poster_path"));
+                resTvShow.getSeasons().add(s);
+            }
 
             try {
 //                resTvShow.setEpRunTime(jsonShow.getInt("episode_run_time"));

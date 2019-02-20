@@ -40,7 +40,6 @@ import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
-import khaledhaouas.com.tmdbmovies.ui.tvshowdetails.TvShowDetailsViewModel;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
 import static android.view.View.GONE;
@@ -124,7 +123,7 @@ public class TvShowDetailsFragment extends Fragment {
                 mRtTvShowRating.setRating((float) tvShow.getRating() / 2);
                 mTxtTvShowReviewNbrs.setText(tvShow.getReviewNbrs() + "");
                 mTxtTvShowPlot.setText(tvShow.getPlot());
-                mTxtTvShowRunTime.setText(tvShow.getSeasonNbre()+"");
+                mTxtTvShowRunTime.setText(tvShow.getSeasonNbre() + "");
                 mTxtTvShowLang.setText(Utils.getCountryFromCode(tvShow.getLanguage()));
                 mTxtTvShowReleaseDate.setText(tvShow.getFirstEpDate());
             }

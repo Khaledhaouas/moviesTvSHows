@@ -39,7 +39,7 @@ public class CreditsRepos {
     }
 
     public void getTvCreditsList(int id, final OnCreditListLoadedCallback callback) {
-        String url = ConfigManager.getInstance().getAppRoot() + "movie/" + id + "/credits" + ConfigManager.getInstance().addApiKeyToRequest();
+        String url = ConfigManager.getInstance().getAppRoot() + "tv/" + id + "/credits" + ConfigManager.getInstance().addApiKeyToRequest();
         Log.e(TAG, "onCreate: " + url);
         ApiManager.getsInstance().GET(url, new ApiServerCallback() {
             @Override
