@@ -125,7 +125,7 @@ public class MovieDetailsFragment extends Fragment {
                 mTxtMoviePlot.setText(movie.getPlot());
                 mTxtMovieRunTime.setText(Utils.formatTimeFromMinutes(movie.getRunTime()));
                 mTxtMovieLang.setText(Utils.getCountryFromCode(movie.getLanguage()));
-                mTxtMovieReleaseDate.setText(movie.getReleaseDate());
+                mTxtMovieReleaseDate.setText(Utils.formatDate(movie.getReleaseDate()));
             }
 
             @Override

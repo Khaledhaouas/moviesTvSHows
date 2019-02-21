@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.util.Util;
 
 import java.util.ArrayList;
 
@@ -58,7 +59,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 //        holder.mTxtMovieGenres.setText(mData.get(position).getGenres());
         holder.mRtMovieRating.setRating((float) mData.get(position).getRating() / 2);
         holder.mTxtMovieReviewNbrs.setText(mData.get(position).getReviewNbrs() + "");
-        holder.mTxtMovieReleaseDate.setText(mData.get(position).getReleaseDate());
+        holder.mTxtMovieReleaseDate.setText(Utils.formatDate(mData.get(position).getReleaseDate()));
 
         setAnimation(holder.mMovieLayout);
 

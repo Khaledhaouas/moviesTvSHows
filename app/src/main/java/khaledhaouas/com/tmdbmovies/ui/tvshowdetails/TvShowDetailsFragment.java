@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import khaledhaouas.com.tmdbmovies.R;
 import khaledhaouas.com.tmdbmovies.adapters.CreditsRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.adapters.ReviewsRecyclerViewAdapter;
+import khaledhaouas.com.tmdbmovies.adapters.SeasonsRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.adapters.TvShowsRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.adapters.VideosRecyclerViewAdapter;
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
@@ -75,6 +76,7 @@ public class TvShowDetailsFragment extends Fragment {
     private ImageView mImgEmptyReviews;
     private ImageView mImgEmptySimilar;
 
+    private RecyclerView mRVSeasonsList;
     private RecyclerView mRVVideosList;
     private RecyclerView mRVCreditList;
     private RecyclerView mRVReviewList;
@@ -125,7 +127,10 @@ public class TvShowDetailsFragment extends Fragment {
                 mTxtTvShowPlot.setText(tvShow.getPlot());
                 mTxtTvShowRunTime.setText(tvShow.getSeasonNbre() + "");
                 mTxtTvShowLang.setText(Utils.getCountryFromCode(tvShow.getLanguage()));
-                mTxtTvShowReleaseDate.setText(tvShow.getFirstEpDate());
+                mTxtTvShowReleaseDate.setText(Utils.formatDate(tvShow.getFirstEpDate()));
+                mRVSeasonsList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                mRVSeasonsList.setAdapter(new SeasonsRecyclerViewAdapter(getActivity(), tvShow.getSeasons()));
+
             }
 
             @Override
@@ -169,6 +174,7 @@ public class TvShowDetailsFragment extends Fragment {
             mLayoutSimilar = getActivity().findViewById(R.id.layout_similar);
             mLayoutReviews = getActivity().findViewById(R.id.layout_reviews);
 
+            mRVSeasonsList = getActivity().findViewById(R.id.rv_seasons);
             mRVVideosList = getActivity().findViewById(R.id.rv_videos);
             mRVCreditList = getActivity().findViewById(R.id.rv_cast);
             mRVReviewList = getActivity().findViewById(R.id.rv_reviews);

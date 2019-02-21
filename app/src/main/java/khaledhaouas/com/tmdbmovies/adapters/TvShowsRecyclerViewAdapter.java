@@ -58,7 +58,7 @@ public class TvShowsRecyclerViewAdapter extends RecyclerView.Adapter<TvShowsRecy
 //        holder.mTxtMovieGenres.setText(mData.get(position).getGenres());
         holder.mRtTvShowRating.setRating((float) mData.get(position).getRating() / 2);
         holder.mTxtTvShowReviewNbrs.setText(mData.get(position).getReviewNbrs() + "");
-        holder.mTxtTvShowReleaseDate.setText(mData.get(position).getFirstEpDate());
+        holder.mTxtTvShowReleaseDate.setText(Utils.formatDate(mData.get(position).getFirstEpDate()));
 
         setAnimation(holder.mTvShowLayout);
 

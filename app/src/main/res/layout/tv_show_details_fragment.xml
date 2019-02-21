@@ -264,6 +264,39 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="15dp"
+                android:text="Seasons"
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:elevation="10dp"
+                    card_view:cardCornerRadius="10dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_seasons"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+                </android.support.v7.widget.CardView>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="15dp"
                 android:text="Videos"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
