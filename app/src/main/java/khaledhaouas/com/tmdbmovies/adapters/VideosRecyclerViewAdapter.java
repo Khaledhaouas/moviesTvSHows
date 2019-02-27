@@ -57,6 +57,8 @@ public class VideosRecyclerViewAdapter extends RecyclerView.Adapter<VideosRecycl
                 });
             }
         }, true);
+
+        holder.youtubePlayerView.getPlayerUIController().showFullscreenButton(false);
     }
 
     // total number of cells

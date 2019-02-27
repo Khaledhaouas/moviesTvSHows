@@ -19,6 +19,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -69,6 +70,8 @@ public class TvShowListFragment extends Fragment {
 
     private void initUIElements() {
         try {
+
+            ((TextView)getActivity().findViewById(R.id.txt_section_name)).setText("Tv Shows");
 
             mRVTvShowsList = getActivity().findViewById(R.id.rv_similar_movies);
             mTabsTvShowListType = getActivity().findViewById(R.id.tabLayout);
