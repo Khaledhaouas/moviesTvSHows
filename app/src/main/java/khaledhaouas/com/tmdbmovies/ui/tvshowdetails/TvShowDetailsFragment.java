@@ -82,6 +82,8 @@ public class TvShowDetailsFragment extends Fragment {
     private RecyclerView mRVReviewList;
     private RecyclerView mRVSimilarTvShowsList;
 
+    private SeasonsRecyclerViewAdapter mSeasonsRecyclerViewAdapter;
+
 
     public static TvShowDetailsFragment newInstance() {
         return new TvShowDetailsFragment();
@@ -129,7 +131,8 @@ public class TvShowDetailsFragment extends Fragment {
                 mTxtTvShowLang.setText(Utils.getCountryFromCode(tvShow.getLanguage()));
                 mTxtTvShowReleaseDate.setText(Utils.formatDate(tvShow.getFirstEpDate()));
                 mRVSeasonsList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                mRVSeasonsList.setAdapter(new SeasonsRecyclerViewAdapter(getActivity(), tvShow.getSeasons()));
+                mSeasonsRecyclerViewAdapter = new SeasonsRecyclerViewAdapter(getActivity(), tvShow.getSeasons());
+                mRVSeasonsList.setAdapter(mSeasonsRecyclerViewAdapter);
 
             }
 
@@ -273,40 +276,6 @@ public class TvShowDetailsFragment extends Fragment {
                                             }
                                         });
                                         mRVSimilarTvShowsList.setAdapter(tvShowsRecyclerViewAdapter);
-//                                        mRVSimilarTvShowsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                                            @Override
-//                                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                                                super.onScrollStateChanged(recyclerView, newState);
-//                                            }
-//
-//                                            @Override
-//                                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                                                super.onScrolled(recyclerView, dx, dy);
-//                                                int visibleItemCount = layoutManager.getChildCount();
-//                                                int totalItemCount = layoutManager.getItemCount();
-//                                                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-//
-//                                                if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentSimilarTvShowsPage() != mViewModel.getTotalSimilarTvShowsPage()) {
-//                                                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-//                                                            && firstVisibleItemPosition >= 0
-//                                                            && totalItemCount >= 20 * mViewModel.getCurrentSimilarTvShowsPage()) {
-//
-//                                                        mViewModel.getNextPageSimilarTvShowsList(mViewModel.getTvShowId(), new OnTvShowsListLoadedCallback() {
-//                                                            @Override
-//                                                            public void onSuccess(ArrayList<TvShow> tvShows, int totalPages) {
-//                                                                tvShowsRecyclerViewAdapter.notifyDataSetChanged();
-//                                                            }
-//
-//                                                            @Override
-//                                                            public void onError() {
-//
-//                                                            }
-//                                                        });
-//                                                    }
-//                                                }
-//                                            }
-//                                        });
-
                                     }
                                     mScrollViewMainContent.fullScroll(View.FOCUS_UP);
 

@@ -2,12 +2,15 @@ package khaledhaouas.com.tmdbmovies.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,18 +19,18 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.R;
-import khaledhaouas.com.tmdbmovies.models.entities.Season;
+import khaledhaouas.com.tmdbmovies.models.entities.Episode;
 import khaledhaouas.com.tmdbmovies.utils.Utils;
 
-public class SeasonsRecyclerViewAdapter extends RecyclerView.Adapter<SeasonsRecyclerViewAdapter.ViewHolder> {
+public class EpisodesRecyclerViewAdapter extends RecyclerView.Adapter<EpisodesRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Season> mData;
+    private ArrayList<Episode> mData;
     private LayoutInflater mInflater;
     private Context mContext;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public SeasonsRecyclerViewAdapter(Context context, ArrayList<Season> data) {
+    public EpisodesRecyclerViewAdapter(Context context, ArrayList<Episode> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.mContext = context;
@@ -37,25 +40,33 @@ public class SeasonsRecyclerViewAdapter extends RecyclerView.Adapter<SeasonsRecy
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.rv_item_season, parent, false);
+        View view = mInflater.inflate(R.layout.rv_item_episode, parent, false);
         return new ViewHolder(view);
     }
 
     // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Utils.initRatingBar(mContext, holder.mRtEpisodeRating);
 
         Glide.with(mContext)
                 .load(mData.get(position).getPosterImage())
                 .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
-                .into(holder.mImgSeasonPoster);
+                .into(holder.mImgEpisodePoster);
 
-        holder.mTxtSeasonName.setText(mData.get(position).getName());
-        holder.mTxtSeasonAirDate.setText(Utils.formatDate(mData.get(position).getAirDate()));
-        holder.mTxtSeasonEpCount.setText(mData.get(position).getEpisodeCount() + " Episodes");
+        holder.mTxtEpisodeName.setText(mData.get(position).getNumber() + ". " + mData.get(position).getName());
+        holder.mTxtEpisodeAirDate.setText(Utils.formatDate(mData.get(position).getAirDate()));
 
-        EpisodesRecyclerViewAdapter episodesRecyclerViewAdapter = new EpisodesRecyclerViewAdapter(mContext, mData.get(position).getEpisodes());
-        holder.mRvEpisodes.setAdapter(episodesRecyclerViewAdapter);
+        holder.mRtEpisodeRating.setRating((float) mData.get(position).getRating() / 2);
+        holder.mTxtEpisodeReviewNbrs.setText(mData.get(position).getVoteCount() + "");
+//        setAnimation(holder.mEpisodeLayout);
+
+    }
+
+    private void setAnimation(View viewToAnimate) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), android.R.anim.slide_in_left);
+        viewToAnimate.startAnimation(animation);
     }
 
     // total number of cells
@@ -65,7 +76,7 @@ public class SeasonsRecyclerViewAdapter extends RecyclerView.Adapter<SeasonsRecy
     }
 
     //     convenience method for getting data at click position
-    public Season getItem(int id) {
+    public Episode getItem(int id) {
         return mData.get(id);
     }
 
@@ -81,22 +92,24 @@ public class SeasonsRecyclerViewAdapter extends RecyclerView.Adapter<SeasonsRecy
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView mImgSeasonPoster;
-        TextView mTxtSeasonName;
-        TextView mTxtSeasonEpCount;
-        TextView mTxtSeasonAirDate;
-        RecyclerView mRvEpisodes;
+        ImageView mImgEpisodePoster;
+        TextView mTxtEpisodeName;
+        //        TextView mTxtEpisodeEpCount;
+        TextView mTxtEpisodeAirDate;
+        RatingBar mRtEpisodeRating;
+        TextView mTxtEpisodeReviewNbrs;
+        RelativeLayout mEpisodeLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
-            mImgSeasonPoster = itemView.findViewById(R.id.img_season_poster);
-            mTxtSeasonName = itemView.findViewById(R.id.txt_season_name);
-            mTxtSeasonEpCount = itemView.findViewById(R.id.txt_season_ep_count);
-            mTxtSeasonAirDate = itemView.findViewById(R.id.txt_season_date);
-            mRvEpisodes = itemView.findViewById(R.id.rv_episodes);
+            mImgEpisodePoster = itemView.findViewById(R.id.img_episode_poster);
+            mTxtEpisodeName = itemView.findViewById(R.id.txt_episode_title);
+//            mTxtEpisodeEpCount = itemView.findViewById(R.id.txt_season_ep_count);
+            mTxtEpisodeAirDate = itemView.findViewById(R.id.txt_episode_release_date);
+            mRtEpisodeRating = itemView.findViewById(R.id.txt_episode_rating);
+            mEpisodeLayout = itemView.findViewById(R.id.layout_episode_item);
+            mTxtEpisodeReviewNbrs = itemView.findViewById(R.id.txt_episode_reviews_nbre);
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-            mRvEpisodes.setLayoutManager(layoutManager);
 
             itemView.setOnClickListener(this);
         }
@@ -104,12 +117,6 @@ public class SeasonsRecyclerViewAdapter extends RecyclerView.Adapter<SeasonsRecy
         @Override
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-            mRvEpisodes.getAdapter().notifyDataSetChanged();
-            if (mRvEpisodes.getVisibility() == View.VISIBLE)
-                mRvEpisodes.setVisibility(View.GONE);
-            else
-                mRvEpisodes.setVisibility(View.VISIBLE);
-
         }
     }
 }

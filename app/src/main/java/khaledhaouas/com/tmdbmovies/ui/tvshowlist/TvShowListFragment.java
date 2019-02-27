@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,7 +148,6 @@ public class TvShowListFragment extends Fragment {
                     mViewModel.getSearchResultTvShowsList(s.toString(), new OnTvShowListLoadedCallback() {
                         @Override
                         public void onSuccess(final ArrayList<TvShow> TvShows, int totalPages) {
-//                            Log.e("Search", TvShows.toString() );
                             final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
                             mRVTvShowsList.setLayoutManager(layoutManager);
                             mRVTvShowsList.setItemAnimator(new DefaultItemAnimator());
@@ -157,7 +155,6 @@ public class TvShowListFragment extends Fragment {
                             TvShowsRecyclerViewAdapter.setClickListener(new TvShowsRecyclerViewAdapter.ItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
-                                    Log.e(TAG, "onItemClick: " + TvShows.get(position).getTitle());
                                     TvShowDetailsFragment tvShowDetailsFragment = TvShowDetailsFragment.newInstance();
                                     Bundle args = new Bundle();
                                     args.putInt("TvShowId", TvShows.get(position).getId());
@@ -256,14 +253,7 @@ public class TvShowListFragment extends Fragment {
                         int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
                         int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                         int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        Log.e(TAG, "isLoading " + mViewModel.isNextPageLoading() + "    "
-                                + mViewModel.getCurrentPopularTvShowsPage()
-                                + "    " + mViewModel.getTotalPopularTvShowsPage());
                         if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentPopularTvShowsPage() != mViewModel.getTotalPopularTvShowsPage()) {
-                            Log.e(TAG, "isLoading 2 : " + (visibleItemCount + firstVisibleItemPosition) + "    "
-                                    + totalItemCount
-                                    + "    " + firstVisibleItemPosition
-                                    + "    " + (20 * mViewModel.getCurrentPopularTvShowsPage()));
                             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                                     && firstVisibleItemPosition >= 0
                                     && totalItemCount >= 20 * mViewModel.getCurrentPopularTvShowsPage()) {
@@ -304,7 +294,6 @@ public class TvShowListFragment extends Fragment {
                 tvShowsRecyclerViewAdapter.setClickListener(new TvShowsRecyclerViewAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Log.e(TAG, "onItemClick: " + mViewModel.getTopRatedTvShows().get(position).getTitle());
                         TvShowDetailsFragment tvShowDetailsFragment = TvShowDetailsFragment.newInstance();
                         Bundle args = new Bundle();
                         args.putInt("TvShowId", mViewModel.getTopRatedTvShows().get(position).getId());

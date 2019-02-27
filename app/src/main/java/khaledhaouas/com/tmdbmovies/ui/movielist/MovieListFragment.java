@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,7 +156,6 @@ public class MovieListFragment extends Fragment {
                             moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
                                 @Override
                                 public void onItemClick(View view, int position) {
-                                    Log.e(TAG, "onItemClick: " + movies.get(position).getTitle());
                                     MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
                                     Bundle args = new Bundle();
                                     args.putInt("MovieId", movies.get(position).getId());
@@ -256,14 +254,7 @@ public class MovieListFragment extends Fragment {
                         int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
                         int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                         int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        Log.e(TAG, "isLoading " + mViewModel.isNextPageLoading() + "    "
-                                + mViewModel.getCurrentPopularMoviesPage()
-                                + "    " + mViewModel.getTotalPopularMoviesPage());
                         if (!mViewModel.isNextPageLoading() && mViewModel.getCurrentPopularMoviesPage() != mViewModel.getTotalPopularMoviesPage()) {
-                            Log.e(TAG, "isLoading 2 : " + (visibleItemCount + firstVisibleItemPosition) + "    "
-                                    + totalItemCount
-                                    + "    " + firstVisibleItemPosition
-                                    + "    " + (20 * mViewModel.getCurrentPopularMoviesPage()));
                             if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                                     && firstVisibleItemPosition >= 0
                                     && totalItemCount >= 20 * mViewModel.getCurrentPopularMoviesPage()) {
@@ -369,7 +360,6 @@ public class MovieListFragment extends Fragment {
                 moviesRecyclerViewAdapter.setClickListener(new MoviesRecyclerViewAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Log.e(TAG, "onItemClick: " + mViewModel.getNowPlayingMovies().get(position).getTitle());
                         MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.newInstance();
                         Bundle args = new Bundle();
                         args.putInt("MovieId", mViewModel.getNowPlayingMovies().get(position).getId());

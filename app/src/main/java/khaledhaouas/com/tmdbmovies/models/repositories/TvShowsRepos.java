@@ -12,9 +12,11 @@ import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiManager;
 import khaledhaouas.com.tmdbmovies.managers.ApiManager.ApiServerCallback;
 import khaledhaouas.com.tmdbmovies.managers.ConfigManager;
 import khaledhaouas.com.tmdbmovies.models.entities.Company;
+import khaledhaouas.com.tmdbmovies.models.entities.Episode;
 import khaledhaouas.com.tmdbmovies.models.entities.Season;
 import khaledhaouas.com.tmdbmovies.models.entities.TvShow;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnEpisodeListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnVideoListLoadedCallback;
@@ -104,6 +106,55 @@ public class TvShowsRepos {
 
     }
 
+    public void getEpisodesBySeason(int showId, int seasonNbre, final OnEpisodeListLoadedCallback callback) {
+        String url = ConfigManager.getInstance().getAppRoot() + "tv/" + showId + "/season/" + seasonNbre + ConfigManager.getInstance().addApiKeyToRequest();
+        Log.e(TAG, "onCreate: " + url);
+        ApiManager.getsInstance().GET(url, new ApiServerCallback() {
+            @Override
+            public boolean onSuccess(JSONObject result) {
+                ArrayList<Episode> episodes = parseJsonToEpisodesList(result);
+
+                callback.onSuccess(episodes);
+                return false;
+            }
+
+            @Override
+            public boolean onFailure(int statusCode) {
+                Log.e(TAG, "onFailure: ");
+                callback.onError();
+                return false;
+            }
+        });
+    }
+
+    private ArrayList<Episode> parseJsonToEpisodesList(JSONObject jsonSeason) {
+        ArrayList<Episode> episodes = new ArrayList<>();
+        try {
+            JSONArray episodesJsonArray = jsonSeason.getJSONArray("episodes");
+            for (int i = 0; i < episodesJsonArray.length(); i++) {
+                Episode resEpisode = new Episode();
+                resEpisode.setId(episodesJsonArray.getJSONObject(i).getInt("id"));
+                resEpisode.setPosterImage("https://image.tmdb.org/t/p/w185" + episodesJsonArray.getJSONObject(i).getString("still_path"));
+                resEpisode.setAirDate(episodesJsonArray.getJSONObject(i).getString("air_date"));
+                resEpisode.setOverview(episodesJsonArray.getJSONObject(i).getString("overview"));
+                resEpisode.setName(episodesJsonArray.getJSONObject(i).getString("name"));
+                resEpisode.setVoteCount(episodesJsonArray.getJSONObject(i).getInt("vote_count"));
+                resEpisode.setRating(episodesJsonArray.getJSONObject(i).getDouble("vote_average"));
+                resEpisode.setNumber(episodesJsonArray.getJSONObject(i).getInt("episode_number"));
+
+                episodes.add(resEpisode);
+                Log.e(TAG, episodes.toString());
+            }
+
+            return episodes;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
 
     public void getSimilarTvShowsList(int id, final OnTvShowListLoadedCallback callback) {
         String url = ConfigManager.getInstance().getAppRoot() + "tv/" + id + "/similar" + ConfigManager.getInstance().addApiKeyToRequest();
@@ -111,7 +162,7 @@ public class TvShowsRepos {
         ApiManager.getsInstance().GET(url, new ApiServerCallback() {
             @Override
             public boolean onSuccess(JSONObject result) {
-                ArrayList<TvShow> TvShows = parseJsonToTvShowsList(result);
+                ArrayList<TvShow> tvShows = parseJsonToTvShowsList(result);
 
 //                Log.e(TAG, TvShow.toString());
                 int totalPages = 0;
@@ -121,7 +172,7 @@ public class TvShowsRepos {
                     e.printStackTrace();
                 }
 //                Log.e(TAG, TvShow.toString());
-                callback.onSuccess(TvShows, totalPages);
+                callback.onSuccess(tvShows, totalPages);
                 return false;
             }
 
@@ -140,7 +191,7 @@ public class TvShowsRepos {
         ApiManager.getsInstance().GET(url, new ApiServerCallback() {
             @Override
             public boolean onSuccess(JSONObject result) {
-                ArrayList<TvShow> TvShows = parseJsonToTvShowsList(result);
+                ArrayList<TvShow> tvShows = parseJsonToTvShowsList(result);
 //                Log.e(TAG, TvShow.toString());
                 int totalPages = 0;
                 try {
@@ -149,7 +200,7 @@ public class TvShowsRepos {
                     e.printStackTrace();
                 }
 //                Log.e(TAG, TvShow.toString());
-                callback.onSuccess(TvShows, totalPages);
+                callback.onSuccess(tvShows, totalPages);
                 return false;
             }
 
@@ -168,7 +219,7 @@ public class TvShowsRepos {
         ApiManager.getsInstance().GET(url, new ApiServerCallback() {
             @Override
             public boolean onSuccess(JSONObject result) {
-                ArrayList<TvShow> TvShows = parseJsonToTvShowsList(result);
+                ArrayList<TvShow> tvShows = parseJsonToTvShowsList(result);
 //                Log.e(TAG, TvShow.toString());
                 int totalPages = 0;
                 try {
@@ -177,7 +228,7 @@ public class TvShowsRepos {
                     e.printStackTrace();
                 }
 //                Log.e(TAG, TvShow.toString());
-                callback.onSuccess(TvShows, totalPages);
+                callback.onSuccess(tvShows, totalPages);
                 return false;
             }
 
@@ -196,7 +247,7 @@ public class TvShowsRepos {
         ApiManager.getsInstance().GET(url, new ApiServerCallback() {
             @Override
             public boolean onSuccess(JSONObject result) {
-                ArrayList<TvShow> TvShows = parseJsonToTvShowsList(result);
+                ArrayList<TvShow> tvShows = parseJsonToTvShowsList(result);
 //                Log.e(TAG, TvShow.toString());
                 int totalPages = 0;
                 try {
@@ -205,7 +256,7 @@ public class TvShowsRepos {
                     e.printStackTrace();
                 }
 //                Log.e(TAG, TvShow.toString());
-                callback.onSuccess(TvShows, totalPages);
+                callback.onSuccess(tvShows, totalPages);
                 return false;
             }
 
@@ -226,7 +277,7 @@ public class TvShowsRepos {
             @Override
             public boolean onSuccess(JSONObject result) {
 
-                ArrayList<TvShow> TvShows = parseJsonToTvShowsList(result);
+                ArrayList<TvShow> tvShows = parseJsonToTvShowsList(result);
                 int totalPages = 0;
                 try {
                     totalPages = result.getInt("total_pages");
@@ -234,7 +285,7 @@ public class TvShowsRepos {
                     e.printStackTrace();
                 }
 //                Log.e(TAG, TvShow.toString());
-                callback.onSuccess(TvShows, totalPages);
+                callback.onSuccess(tvShows, totalPages);
                 return false;
             }
 
@@ -255,7 +306,7 @@ public class TvShowsRepos {
             @Override
             public boolean onSuccess(JSONObject result) {
 
-                ArrayList<TvShow> TvShows = parseJsonToTvShowsList(result);
+                ArrayList<TvShow> tvShows = parseJsonToTvShowsList(result);
                 int totalPages = 0;
                 try {
                     totalPages = result.getInt("total_pages");
@@ -263,7 +314,7 @@ public class TvShowsRepos {
                     e.printStackTrace();
                 }
 //                Log.e(TAG, TvShow.toString());
-                callback.onSuccess(TvShows, totalPages);
+                callback.onSuccess(tvShows, totalPages);
                 return false;
             }
 
@@ -279,19 +330,19 @@ public class TvShowsRepos {
     private ArrayList<TvShow> parseJsonToTvShowsList(JSONObject jsonTvShows) {
         ArrayList<TvShow> shows = new ArrayList<>();
         try {
-            JSONArray TvShowsJsonArray = jsonTvShows.getJSONArray("results");
-            for (int i = 0; i < TvShowsJsonArray.length(); i++) {
+            JSONArray tvShowsJsonArray = jsonTvShows.getJSONArray("results");
+            for (int i = 0; i < tvShowsJsonArray.length(); i++) {
                 TvShow resTvShow = new TvShow();
-                resTvShow.setId(TvShowsJsonArray.getJSONObject(i).getInt("id"));
-                resTvShow.setPosterImageUrl("https://image.tmdb.org/t/p/w185" + TvShowsJsonArray.getJSONObject(i).getString("poster_path"));
-                resTvShow.setTitle(TvShowsJsonArray.getJSONObject(i).getString("name"));
-                resTvShow.setFirstEpDate(TvShowsJsonArray.getJSONObject(i).getString("first_air_date"));
-                resTvShow.setPlot(TvShowsJsonArray.getJSONObject(i).getString("overview"));
-                resTvShow.setReviewNbrs(TvShowsJsonArray.getJSONObject(i).getInt("vote_count"));
-                resTvShow.setRating(TvShowsJsonArray.getJSONObject(i).getDouble("vote_average"));
-                resTvShow.setLanguage(TvShowsJsonArray.getJSONObject(i).getString("original_language"));
+                resTvShow.setId(tvShowsJsonArray.getJSONObject(i).getInt("id"));
+                resTvShow.setPosterImageUrl("https://image.tmdb.org/t/p/w185" + tvShowsJsonArray.getJSONObject(i).getString("poster_path"));
+                resTvShow.setTitle(tvShowsJsonArray.getJSONObject(i).getString("name"));
+                resTvShow.setFirstEpDate(tvShowsJsonArray.getJSONObject(i).getString("first_air_date"));
+                resTvShow.setPlot(tvShowsJsonArray.getJSONObject(i).getString("overview"));
+                resTvShow.setReviewNbrs(tvShowsJsonArray.getJSONObject(i).getInt("vote_count"));
+                resTvShow.setRating(tvShowsJsonArray.getJSONObject(i).getDouble("vote_average"));
+                resTvShow.setLanguage(tvShowsJsonArray.getJSONObject(i).getString("original_language"));
                 StringBuilder genres = new StringBuilder();
-//                JSONArray genresArray = TvShowsJsonArray.getJSONObject(i).getJSONArray("genre_ids");
+//                JSONArray genresArray = tvShowsJsonArray.getJSONObject(i).getJSONArray("genre_ids");
 //                for (int j = 0; j < genresArray.length(); j++) {
 //                    genres.append(((JSONObject) genresArray.get(j)).getInt("name")).append("|");
 //                }

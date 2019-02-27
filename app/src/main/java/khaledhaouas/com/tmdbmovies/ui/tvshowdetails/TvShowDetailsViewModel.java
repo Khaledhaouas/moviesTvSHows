@@ -5,10 +5,13 @@ import android.arch.lifecycle.ViewModel;
 import java.util.ArrayList;
 
 import khaledhaouas.com.tmdbmovies.models.entities.Credit;
+import khaledhaouas.com.tmdbmovies.models.entities.Episode;
 import khaledhaouas.com.tmdbmovies.models.entities.Review;
+import khaledhaouas.com.tmdbmovies.models.entities.Season;
 import khaledhaouas.com.tmdbmovies.models.entities.TvShow;
 import khaledhaouas.com.tmdbmovies.models.entities.Video;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnCreditListLoadedCallback;
+import khaledhaouas.com.tmdbmovies.models.interfaces.OnEpisodeListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnReviewListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowListLoadedCallback;
 import khaledhaouas.com.tmdbmovies.models.interfaces.OnTvShowLoadedCallback;
@@ -48,9 +51,27 @@ public class TvShowDetailsViewModel extends ViewModel {
     public void getTvShowDetails(final OnTvShowLoadedCallback callback) {
         mTvShowRepos.getTvShowDetails(mTvShowId, new OnTvShowLoadedCallback() {
             @Override
-            public void onSuccess(TvShow tvShow) {
+            public void onSuccess(final TvShow tvShow) {
                 mTvShow = tvShow;
-                callback.onSuccess(tvShow);
+                for (final Season s : tvShow.getSeasons()) {
+                    getEpisodesBySeason(s.getNumber(), new OnEpisodeListLoadedCallback() {
+                        @Override
+                        public void onSuccess(ArrayList<Episode> episodes) {
+                            getSeasonByNbre(s.getNumber()).getEpisodes().clear();
+                            getSeasonByNbre(s.getNumber()).getEpisodes().addAll(episodes);
+                            if (s.getNumber() == tvShow.getSeasons().get(tvShow.getSeasons().size() - 1).getNumber()) {
+                                callback.onSuccess(tvShow);
+                            }
+                        }
+
+                        @Override
+                        public void onError() {
+                            callback.onError();
+                        }
+                    });
+
+                }
+
             }
 
             @Override
@@ -144,6 +165,26 @@ public class TvShowDetailsViewModel extends ViewModel {
         });
     }
 
+    public void getEpisodesBySeason(final int seasonNbre, final OnEpisodeListLoadedCallback callback) {
+        if (getSeasonByNbre(seasonNbre).getEpisodes().isEmpty()) {
+            mTvShowRepos.getEpisodesBySeason(mTvShowId, seasonNbre, new OnEpisodeListLoadedCallback() {
+                @Override
+                public void onSuccess(ArrayList<Episode> episodes) {
+
+                    getSeasonByNbre(seasonNbre).getEpisodes().addAll(episodes);
+                    callback.onSuccess(episodes);
+                }
+
+                @Override
+                public void onError() {
+                    callback.onError();
+                }
+            });
+        } else
+            callback.onSuccess(getSeasonByNbre(seasonNbre).getEpisodes());
+
+    }
+
     public int getTvShowId() {
         return mTvShowId;
     }
@@ -178,5 +219,13 @@ public class TvShowDetailsViewModel extends ViewModel {
 
     public boolean isNextPageLoading() {
         return isNextPageLoading;
+    }
+
+    private Season getSeasonByNbre(int nbre) {
+        for (Season s : mTvShow.getSeasons()) {
+            if (s.getNumber() == nbre)
+                return s;
+        }
+        return null;
     }
 }
