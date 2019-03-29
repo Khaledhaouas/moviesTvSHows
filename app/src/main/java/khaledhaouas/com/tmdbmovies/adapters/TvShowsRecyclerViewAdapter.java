@@ -51,7 +51,7 @@ public class TvShowsRecyclerViewAdapter extends RecyclerView.Adapter<TvShowsRecy
 
         Glide.with(mContext)
                 .load(mData.get(position).getPosterImageUrl())
-                .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
+                .apply(new RequestOptions().placeholder(R.drawable.movie_poster_placeholder))
                 .into(holder.mImgTvShowPoster);
 
         holder.mTxtTvShowTitle.setText(mData.get(position).getTitle());

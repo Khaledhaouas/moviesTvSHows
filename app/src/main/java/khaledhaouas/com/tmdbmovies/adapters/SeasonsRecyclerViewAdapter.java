@@ -47,7 +47,7 @@ public class SeasonsRecyclerViewAdapter extends RecyclerView.Adapter<SeasonsRecy
 
         Glide.with(mContext)
                 .load(mData.get(position).getPosterImage())
-                .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
+                .apply(new RequestOptions().placeholder(R.drawable.movie_poster_placeholder))
                 .into(holder.mImgSeasonPoster);
 
         holder.mTxtSeasonName.setText(mData.get(position).getName());

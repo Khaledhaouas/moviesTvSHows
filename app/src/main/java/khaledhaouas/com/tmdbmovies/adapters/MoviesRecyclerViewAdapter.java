@@ -52,7 +52,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
 
         Glide.with(mContext)
                 .load(mData.get(position).getPosterImageUrl())
-                .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
+                .apply(new RequestOptions().placeholder(R.drawable.movie_poster_placeholder))
                 .into(holder.mImgMoviePoster);
 
         holder.mTxtMovieTitle.setText(mData.get(position).getTitle());

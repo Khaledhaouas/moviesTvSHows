@@ -345,7 +345,7 @@ public class MovieDetailsFragment extends Fragment {
     private void loadImageFromURL(ImageView imgView, String url) {
         Glide.with(this)
                 .load(url)
-                .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
+                .apply(new RequestOptions().placeholder(R.drawable.movie_poster_placeholder))
                 .into(imgView);
     }
 

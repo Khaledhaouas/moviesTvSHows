@@ -51,7 +51,7 @@ public class EpisodesRecyclerViewAdapter extends RecyclerView.Adapter<EpisodesRe
 
         Glide.with(mContext)
                 .load(mData.get(position).getPosterImage())
-                .apply(new RequestOptions().placeholder(R.drawable.movie_background_placeholder))
+                .apply(new RequestOptions().placeholder(R.drawable.movie_poster_placeholder))
                 .into(holder.mImgEpisodePoster);
 
         holder.mTxtEpisodeName.setText(mData.get(position).getNumber() + ". " + mData.get(position).getName());

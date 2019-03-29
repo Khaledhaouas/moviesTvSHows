@@ -6,8 +6,23 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+
     </style>
 
     <style name="customRatingBar" parent="android:style/Widget.Material.RatingBar.Small"></style>
+
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxBackgroundColor">@null</item>
+        <item name="boxCollapsedPaddingTop">0dp</item>
+        <item name="colorAccent">@android:color/white</item>
+
+
+    </style>
 
 </resources>
